@@ -12,6 +12,14 @@ import {
   Chip,
   IconButton,
   InputAdornment,
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogActions,
+  MenuItem,
+  Select,
+  FormControl,
+  InputLabel,
 } from "@mui/material";
 import {
   Search,
@@ -22,6 +30,7 @@ import {
   Cancel,
   Edit,
   Delete,
+  Close,
 } from "@mui/icons-material";
 
 const cars = [
@@ -86,6 +95,15 @@ const categories = ["All", "Available", "Maintenance", "Booked"];
 export default function AdminCarsPage() {
   const [selectedCategory, setSelectedCategory] = useState("All");
   const [searchQuery, setSearchQuery] = useState("");
+  const [openAddForm, setOpenAddForm] = useState(false);
+  const [formData, setFormData] = useState({
+    name: "",
+    category: "",
+    price: "",
+    rating: "",
+    status: "Available",
+    image: "🚗",
+  });
 
   const filteredCars = cars.filter((car) => {
     const matchesCategory = selectedCategory === "All" || car.status === selectedCategory;
@@ -94,7 +112,35 @@ export default function AdminCarsPage() {
   });
 
   const handleAddNew = () => {
-    alert("Add new car functionality");
+    setOpenAddForm(true);
+  };
+
+  const handleCloseForm = () => {
+    setOpenAddForm(false);
+    setFormData({
+      name: "",
+      category: "",
+      price: "",
+      rating: "",
+      status: "Available",
+      image: "🚗",
+    });
+  };
+
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | { name?: string; value: unknown }>) => {
+    const { name, value } = e.target;
+    setFormData({
+      ...formData,
+      [name as string]: value,
+    });
+  };
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    // Here you would typically send the data to your API
+    console.log("New car data:", formData);
+    alert(`Car "${formData.name}" added successfully!`);
+    handleCloseForm();
   };
 
   const handleEdit = (carId: number) => {
@@ -245,6 +291,237 @@ export default function AdminCarsPage() {
           </Grid>
         ))}
       </Grid>
+
+      {/* Add Car Form Dialog */}
+      <Dialog
+        open={openAddForm}
+        onClose={handleCloseForm}
+        maxWidth="md"
+        fullWidth
+        PaperProps={{
+          className: "!bg-slate-800 !rounded-2xl",
+        }}
+      >
+        <DialogTitle className="!bg-slate-800 !text-white !flex !items-center !justify-between !pb-4">
+          <Typography variant="h5" className="!font-bold">
+            Add New Car
+          </Typography>
+          <IconButton
+            onClick={handleCloseForm}
+            className="!text-white/70 hover:!bg-white/10"
+            size="small"
+          >
+            <Close />
+          </IconButton>
+        </DialogTitle>
+        <form onSubmit={handleSubmit}>
+          <DialogContent className="!bg-slate-800 !pt-6">
+            <Grid container spacing={3}>
+              <Grid item xs={12}>
+                <TextField
+                  fullWidth
+                  label="Car Name"
+                  name="name"
+                  value={formData.name}
+                  onChange={handleInputChange}
+                  required
+                  sx={{
+                    "& .MuiOutlinedInput-root": {
+                      color: "white",
+                      "& fieldset": {
+                        borderColor: "rgba(255, 255, 255, 0.1)",
+                      },
+                      "&:hover fieldset": {
+                        borderColor: "rgba(255, 255, 255, 0.2)",
+                      },
+                      "&.Mui-focused fieldset": {
+                        borderColor: "rgba(59, 130, 246, 0.5)",
+                      },
+                    },
+                    "& .MuiInputLabel-root": {
+                      color: "rgba(255, 255, 255, 0.7)",
+                    },
+                  }}
+                />
+              </Grid>
+
+              <Grid item xs={12} sm={6}>
+                <FormControl fullWidth required>
+                  <InputLabel sx={{ color: "rgba(255, 255, 255, 0.7)" }}>Category</InputLabel>
+                  <Select
+                    name="category"
+                    value={formData.category}
+                    onChange={handleInputChange}
+                    label="Category"
+                    sx={{
+                      color: "white",
+                      "& .MuiOutlinedInput-notchedOutline": {
+                        borderColor: "rgba(255, 255, 255, 0.1)",
+                      },
+                      "&:hover .MuiOutlinedInput-notchedOutline": {
+                        borderColor: "rgba(255, 255, 255, 0.2)",
+                      },
+                      "&.Mui-focused .MuiOutlinedInput-notchedOutline": {
+                        borderColor: "rgba(59, 130, 246, 0.5)",
+                      },
+                      "& .MuiSvgIcon-root": {
+                        color: "rgba(255, 255, 255, 0.7)",
+                      },
+                    }}
+                  >
+                    <MenuItem value="Electric">Electric</MenuItem>
+                    <MenuItem value="Sports">Sports</MenuItem>
+                    <MenuItem value="Luxury">Luxury</MenuItem>
+                    <MenuItem value="Performance">Performance</MenuItem>
+                    <MenuItem value="Sedan">Sedan</MenuItem>
+                    <MenuItem value="SUV">SUV</MenuItem>
+                    <MenuItem value="Supercar">Supercar</MenuItem>
+                  </Select>
+                </FormControl>
+              </Grid>
+
+              <Grid item xs={12} sm={6}>
+                <TextField
+                  fullWidth
+                  label="Price per Day ($)"
+                  name="price"
+                  type="number"
+                  value={formData.price}
+                  onChange={handleInputChange}
+                  required
+                  inputProps={{ min: 0, step: 1 }}
+                  sx={{
+                    "& .MuiOutlinedInput-root": {
+                      color: "white",
+                      "& fieldset": {
+                        borderColor: "rgba(255, 255, 255, 0.1)",
+                      },
+                      "&:hover fieldset": {
+                        borderColor: "rgba(255, 255, 255, 0.2)",
+                      },
+                      "&.Mui-focused fieldset": {
+                        borderColor: "rgba(59, 130, 246, 0.5)",
+                      },
+                    },
+                    "& .MuiInputLabel-root": {
+                      color: "rgba(255, 255, 255, 0.7)",
+                    },
+                  }}
+                />
+              </Grid>
+
+              <Grid item xs={12} sm={6}>
+                <TextField
+                  fullWidth
+                  label="Rating"
+                  name="rating"
+                  type="number"
+                  value={formData.rating}
+                  onChange={handleInputChange}
+                  required
+                  inputProps={{ min: 0, max: 5, step: 0.1 }}
+                  sx={{
+                    "& .MuiOutlinedInput-root": {
+                      color: "white",
+                      "& fieldset": {
+                        borderColor: "rgba(255, 255, 255, 0.1)",
+                      },
+                      "&:hover fieldset": {
+                        borderColor: "rgba(255, 255, 255, 0.2)",
+                      },
+                      "&.Mui-focused fieldset": {
+                        borderColor: "rgba(59, 130, 246, 0.5)",
+                      },
+                    },
+                    "& .MuiInputLabel-root": {
+                      color: "rgba(255, 255, 255, 0.7)",
+                    },
+                  }}
+                />
+              </Grid>
+
+              <Grid item xs={12} sm={6}>
+                <FormControl fullWidth required>
+                  <InputLabel sx={{ color: "rgba(255, 255, 255, 0.7)" }}>Status</InputLabel>
+                  <Select
+                    name="status"
+                    value={formData.status}
+                    onChange={handleInputChange}
+                    label="Status"
+                    sx={{
+                      color: "white",
+                      "& .MuiOutlinedInput-notchedOutline": {
+                        borderColor: "rgba(255, 255, 255, 0.1)",
+                      },
+                      "&:hover .MuiOutlinedInput-notchedOutline": {
+                        borderColor: "rgba(255, 255, 255, 0.2)",
+                      },
+                      "&.Mui-focused .MuiOutlinedInput-notchedOutline": {
+                        borderColor: "rgba(59, 130, 246, 0.5)",
+                      },
+                      "& .MuiSvgIcon-root": {
+                        color: "rgba(255, 255, 255, 0.7)",
+                      },
+                    }}
+                  >
+                    <MenuItem value="Available">Available</MenuItem>
+                    <MenuItem value="Booked">Booked</MenuItem>
+                    <MenuItem value="Maintenance">Maintenance</MenuItem>
+                  </Select>
+                </FormControl>
+              </Grid>
+
+              <Grid item xs={12}>
+                <FormControl fullWidth>
+                  <InputLabel sx={{ color: "rgba(255, 255, 255, 0.7)" }}>Car Icon</InputLabel>
+                  <Select
+                    name="image"
+                    value={formData.image}
+                    onChange={handleInputChange}
+                    label="Car Icon"
+                    sx={{
+                      color: "white",
+                      "& .MuiOutlinedInput-notchedOutline": {
+                        borderColor: "rgba(255, 255, 255, 0.1)",
+                      },
+                      "&:hover .MuiOutlinedInput-notchedOutline": {
+                        borderColor: "rgba(255, 255, 255, 0.2)",
+                      },
+                      "&.Mui-focused .MuiOutlinedInput-notchedOutline": {
+                        borderColor: "rgba(59, 130, 246, 0.5)",
+                      },
+                      "& .MuiSvgIcon-root": {
+                        color: "rgba(255, 255, 255, 0.7)",
+                      },
+                    }}
+                  >
+                    <MenuItem value="🚗">🚗 Car</MenuItem>
+                    <MenuItem value="🏎️">🏎️ Sports Car</MenuItem>
+                    <MenuItem value="🚙">🚙 SUV</MenuItem>
+                    <MenuItem value="🚕">🚕 Taxi</MenuItem>
+                    <MenuItem value="🚐">🚐 Van</MenuItem>
+                  </Select>
+                </FormControl>
+              </Grid>
+            </Grid>
+          </DialogContent>
+          <DialogActions className="!bg-slate-800 !px-6 !py-4 !gap-2">
+            <Button
+              onClick={handleCloseForm}
+              className="!text-white/70 hover:!bg-white/10"
+            >
+              Cancel
+            </Button>
+            <Button
+              type="submit"
+              variant="contained"
+              className="!bg-gradient-to-r !from-blue-500 !to-blue-600 hover:!from-blue-600 hover:!to-blue-700 !shadow-lg !rounded-xl"
+            >
+              Add Car
+            </Button>
+          </DialogActions>
+        </form>
+      </Dialog>
     </Box>
   );
 }

@@ -133,10 +133,20 @@ export default function PublicLayout({
         onClose={handleDrawerToggle}
         ModalProps={{
           keepMounted: true,
+          slotProps: {
+            backdrop: {
+              sx: {
+                backgroundColor: "rgba(0, 0, 0, 0.5)",
+              },
+            },
+          },
         }}
-        className="md:!hidden"
-        PaperProps={{
-          className: "!bg-slate-800 !w-64",
+        sx={{
+          display: { xs: "block", md: "none" },
+          "& .MuiDrawer-paper": {
+            backgroundColor: "#1e293b",
+            width: 256,
+          },
         }}
       >
         <Box className="w-64 p-4">
