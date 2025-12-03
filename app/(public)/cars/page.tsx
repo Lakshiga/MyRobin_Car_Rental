@@ -124,13 +124,21 @@ export default function CarsPage() {
   };
 
   return (
-    <Box className="space-y-8">
+    <Box className="space-y-4 md:space-y-8 w-full">
       {/* Header */}
-      <Box className="space-y-4">
-        <Typography variant="h3" className="!font-bold !text-white">
+      <Box className="space-y-2 md:space-y-4 w-full">
+        <Typography 
+          variant="h3" 
+          className="!font-bold !text-white !text-2xl sm:!text-3xl md:!text-4xl"
+          sx={{ fontSize: "clamp(1.5rem, 4vw, 2.25rem)" }}
+        >
           Available Cars
         </Typography>
-        <Typography variant="body1" className="!text-white/70">
+        <Typography 
+          variant="body1" 
+          className="!text-white/70 !text-sm md:!text-base"
+          sx={{ fontSize: "clamp(0.875rem, 2vw, 1rem)" }}
+        >
           Filter by category, search by name, or browse our entire fleet.
         </Typography>
       </Box>
@@ -203,9 +211,9 @@ export default function CarsPage() {
       </Typography>
 
       {/* Cars Grid */}
-      <Grid container spacing={3}>
+      <Grid container spacing={{ xs: 2, sm: 2, md: 3 }} sx={{ width: "100%" }}>
         {filteredCars.map((car) => (
-          <Grid item xs={12} sm={6} lg={4} key={car.id}>
+          <Grid item xs={12} sm={6} md={6} lg={4} key={car.id} sx={{ width: { xs: "100%", sm: "50%", md: "50%", lg: "33.33%" } }}>
             <Card className="!rounded-2xl !shadow-xl hover:!shadow-2xl !transition-all !transform hover:!-translate-y-1 !h-full !bg-slate-800/50 !backdrop-blur-lg !border !border-white/10">
               {/* Car Image */}
               <Box className="relative">

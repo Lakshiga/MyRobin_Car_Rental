@@ -115,14 +115,22 @@ export default function BookingsPage() {
   };
 
   return (
-    <Box className="space-y-8">
+    <Box className="space-y-4 md:space-y-8 w-full">
       {/* Header */}
-      <Box className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-        <Box>
-          <Typography variant="h3" className="!font-bold !text-white">
+      <Box className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 w-full">
+        <Box className="w-full sm:w-auto">
+          <Typography 
+            variant="h3" 
+            className="!font-bold !text-white !text-2xl sm:!text-3xl md:!text-4xl"
+            sx={{ fontSize: "clamp(1.5rem, 4vw, 2.25rem)" }}
+          >
             My Bookings
           </Typography>
-          <Typography variant="body1" className="!text-white/70 !mt-1">
+          <Typography 
+            variant="body1" 
+            className="!text-white/70 !mt-1 !text-sm md:!text-base"
+            sx={{ fontSize: "clamp(0.875rem, 2vw, 1rem)" }}
+          >
             Manage and track your car rental bookings
           </Typography>
         </Box>
@@ -155,11 +163,11 @@ export default function BookingsPage() {
 
       {/* Bookings List */}
       {filteredBookings.length > 0 ? (
-        <Grid container spacing={3}>
+        <Grid container spacing={{ xs: 2, sm: 2, md: 3 }} sx={{ width: "100%" }}>
           {filteredBookings.map((booking) => {
             const statusColors = getStatusColor(booking.status);
             return (
-              <Grid item xs={12} key={booking.id}>
+              <Grid item xs={12} key={booking.id} sx={{ width: "100%" }}>
                 <Card className="!rounded-2xl !shadow-xl hover:!shadow-2xl !transition-all !bg-slate-800/50 !backdrop-blur-lg !border !border-white/10">
                   <CardContent className="!p-6">
                     <Grid container spacing={3}>

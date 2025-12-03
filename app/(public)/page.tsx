@@ -81,9 +81,9 @@ export default function PublicHomePage() {
   };
 
   return (
-    <Box className="space-y-16 md:space-y-24">
+    <Box className="space-y-8 md:space-y-16 lg:space-y-24 w-full">
       {/* Hero Section */}
-      <Box className="text-center space-y-6">
+      <Box className="text-center space-y-4 md:space-y-6 w-full">
         <Box className="space-y-4">
           <Chip
             label="Premium Fleet • Flexible Plans"
@@ -92,7 +92,8 @@ export default function PublicHomePage() {
           />
           <Typography
             variant="h2"
-            className="!text-4xl md:!text-6xl !font-bold !text-white !leading-tight"
+            className="!text-3xl sm:!text-4xl md:!text-5xl lg:!text-6xl !font-bold !text-white !leading-tight !w-full"
+            sx={{ fontSize: "clamp(1.875rem, 5vw, 3.75rem)" }}
           >
             Rent the Perfect Car
             <br />
@@ -102,7 +103,8 @@ export default function PublicHomePage() {
           </Typography>
           <Typography
             variant="body1"
-            className="!text-lg md:!text-xl !text-white/70 !max-w-2xl !mx-auto"
+            className="!text-sm sm:!text-base md:!text-lg lg:!text-xl !text-white/70 !max-w-full md:!max-w-2xl !mx-auto !px-4"
+            sx={{ fontSize: "clamp(0.875rem, 2vw, 1.25rem)" }}
           >
             MyRobin connects travelers with curated vehicles, real-time availability, and
             concierge-level support across the globe.
@@ -135,9 +137,9 @@ export default function PublicHomePage() {
         <Typography variant="h5" className="!font-bold !text-white !mb-6">
           Popular Brands
         </Typography>
-        <Grid container spacing={3}>
+        <Grid container spacing={2} sx={{ width: "100%" }}>
           {brands.map((brand, index) => (
-            <Grid item xs={6} sm={3} key={index}>
+            <Grid item xs={6} sm={6} md={3} key={index} sx={{ width: { xs: "50%", sm: "50%", md: "25%" } }}>
               <Card className="!rounded-2xl hover:!shadow-xl !transition-all !cursor-pointer !bg-slate-800/50 !backdrop-blur-lg !border !border-white/10">
                 <CardContent className="!p-4 !text-center">
                   <Avatar className="!h-16 !w-16 !mx-auto !mb-2 !bg-slate-700 !text-white !font-bold !text-xl">

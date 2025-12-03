@@ -50,13 +50,21 @@ export default function ProfilePage() {
   ];
 
   return (
-    <Box className="space-y-8">
+    <Box className="space-y-4 md:space-y-8 w-full">
       {/* Header */}
-      <Box>
-        <Typography variant="h3" className="!font-bold !text-white">
+      <Box className="w-full">
+        <Typography 
+          variant="h3" 
+          className="!font-bold !text-white !text-2xl sm:!text-3xl md:!text-4xl"
+          sx={{ fontSize: "clamp(1.5rem, 4vw, 2.25rem)" }}
+        >
           My Profile
         </Typography>
-        <Typography variant="body1" className="!text-white/70 !mt-1">
+        <Typography 
+          variant="body1" 
+          className="!text-white/70 !mt-1 !text-sm md:!text-base"
+          sx={{ fontSize: "clamp(0.875rem, 2vw, 1rem)" }}
+        >
           Manage your account information and preferences
         </Typography>
       </Box>
@@ -64,8 +72,8 @@ export default function ProfilePage() {
       {/* Profile Card */}
       <Card className="!rounded-2xl !shadow-xl !overflow-hidden !bg-slate-800/50 !backdrop-blur-lg !border !border-white/10">
         {/* Header Section */}
-        <Box className="bg-gradient-to-r from-blue-500 to-blue-600 p-8 text-white">
-          <Grid container spacing={3} alignItems="center">
+        <Box className="bg-gradient-to-r from-blue-500 to-blue-600 p-4 md:p-8 text-white">
+          <Grid container spacing={{ xs: 2, sm: 2, md: 3 }} alignItems="center" sx={{ width: "100%" }}>
             <Grid item>
               <Avatar className="!h-24 !w-24 !bg-white/20 !text-white !text-3xl !font-bold !border-4 !border-white/30">
                 JD
@@ -140,7 +148,7 @@ export default function ProfilePage() {
             Personal Information
           </Typography>
 
-          <Grid container spacing={3}>
+          <Grid container spacing={{ xs: 2, sm: 2, md: 3 }} sx={{ width: "100%" }}>
             <Grid item xs={12} md={6}>
               <Box className="flex items-center gap-2 mb-2">
                 <Person className="!text-white/50" />

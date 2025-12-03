@@ -24,3 +24,58 @@ body {
   color: var(--foreground);
   font-family: Arial, Helvetica, sans-serif;
 }
+
+/* Mobile Responsive Utilities */
+@media (max-width: 768px) {
+  * {
+    box-sizing: border-box;
+  }
+  
+  /* Ensure full width on mobile */
+  .MuiContainer-root,
+  .MuiBox-root {
+    width: 100% !important;
+    max-width: 100% !important;
+  }
+  
+  /* Responsive padding */
+  .MuiCardContent-root {
+    padding: 1rem !important;
+  }
+  
+  /* Responsive typography */
+  .MuiTypography-h1 {
+    font-size: clamp(1.5rem, 8vw, 3rem) !important;
+  }
+  
+  .MuiTypography-h2 {
+    font-size: clamp(1.25rem, 6vw, 2.5rem) !important;
+  }
+  
+  .MuiTypography-h3 {
+    font-size: clamp(1.125rem, 5vw, 2rem) !important;
+  }
+  
+  .MuiTypography-h4 {
+    font-size: clamp(1rem, 4vw, 1.75rem) !important;
+  }
+  
+  .MuiTypography-body1 {
+    font-size: clamp(0.875rem, 3vw, 1rem) !important;
+  }
+  
+  .MuiTypography-body2 {
+    font-size: clamp(0.75rem, 2.5vw, 0.875rem) !important;
+  }
+}
+
+/* Percentage-based responsive spacing */
+@media (max-width: 600px) {
+  .MuiGrid-spacing-xs-2 > .MuiGrid-item {
+    padding: 1% !important;
+  }
+  
+  .MuiGrid-spacing-xs-3 > .MuiGrid-item {
+    padding: 1.5% !important;
+  }
+}

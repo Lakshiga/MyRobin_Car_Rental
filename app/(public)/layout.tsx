@@ -55,11 +55,11 @@ export default function PublicLayout({
   };
 
   return (
-    <Box className="min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900">
-      {/* App Bar */}
+    <Box className="min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 pb-20 md:pb-0">
+      {/* App Bar - Desktop Only */}
       <AppBar
         position="sticky"
-        className="!bg-slate-900/95 !backdrop-blur-lg !shadow-lg !border-b !border-white/10"
+        className="!bg-slate-900/95 !backdrop-blur-lg !shadow-lg !border-b !border-white/10 !hidden md:!flex"
         elevation={0}
       >
         <Toolbar className="!px-4 md:!px-8">
@@ -116,18 +116,11 @@ export default function PublicLayout({
             </Button>
           </Box>
 
-          {/* Mobile Menu Button */}
-          <IconButton
-            className="!text-white md:!hidden"
-            onClick={handleDrawerToggle}
-          >
-            <Menu />
-          </IconButton>
         </Toolbar>
       </AppBar>
 
-      {/* Mobile Drawer */}
-      <Drawer
+      {/* Mobile Drawer - Removed, using bottom nav instead */}
+      {/* <Drawer
         variant="temporary"
         open={mobileOpen}
         onClose={handleDrawerToggle}
@@ -197,15 +190,68 @@ export default function PublicLayout({
             </Button>
           </Box>
         </Box>
-      </Drawer>
+      </Drawer> */}
 
       {/* Main Content */}
-      <main className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-8 md:py-12">
+      <main className="mx-auto w-full max-w-7xl px-2 sm:px-4 md:px-6 lg:px-8 py-4 md:py-12 pb-24 md:pb-12">
         {children}
       </main>
 
+      {/* Mobile Bottom Navigation Bar */}
+      <Box className="fixed bottom-0 left-0 right-0 z-50 bg-slate-900/95 backdrop-blur-lg border-t border-white/10 md:hidden">
+        <Box className="flex items-center justify-around h-16">
+          {navLinks.map((link) => {
+            const Icon = link.icon;
+            const active = isActive(link.href);
+            return (
+              <Link
+                key={link.href}
+                href={link.href}
+                className={`flex flex-col items-center justify-center flex-1 h-full transition-all ${
+                  active
+                    ? "text-blue-400"
+                    : "text-white/60"
+                }`}
+              >
+                <Icon className="!text-2xl mb-1" />
+                <Typography variant="caption" className={`!text-xs !font-medium ${active ? "!text-blue-400" : ""}`}>
+                  {link.label}
+                </Typography>
+              </Link>
+            );
+          })}
+        </Box>
+      </Box>
+
+      {/* Mobile Top Bar - Logo Only */}
+      <Box className="md:hidden fixed top-0 left-0 right-0 z-40 bg-slate-900/95 backdrop-blur-lg border-b border-white/10 h-14 flex items-center justify-between px-4">
+        <Link href="/" className="flex items-center gap-2 no-underline">
+          <Box className="flex h-8 w-8 items-center justify-center rounded-xl bg-gradient-to-br from-blue-500 to-blue-600 text-white font-bold text-sm shadow-lg">
+            M
+          </Box>
+          <Typography variant="h6" className="!font-bold !text-white !text-base">
+            MyRobin
+          </Typography>
+        </Link>
+        <Box className="flex items-center gap-2">
+          <IconButton className="!text-white/70 hover:!bg-white/10 !p-2">
+            <Badge badgeContent={3} color="error">
+              <Notifications className="!text-white !text-xl" />
+            </Badge>
+          </IconButton>
+          <Button
+            variant="contained"
+            onClick={handleSignIn}
+            size="small"
+            className="!bg-gradient-to-r !from-blue-500 !to-blue-600 hover:!from-blue-600 hover:!to-blue-700 !shadow-lg !rounded-lg !text-xs !px-3 !py-1"
+          >
+            Sign In
+          </Button>
+        </Box>
+      </Box>
+
       {/* Footer */}
-      <Box className="bg-slate-900/50 border-t border-white/10 text-white mt-20">
+      <Box className="bg-slate-900/50 border-t border-white/10 text-white mt-20 hidden md:block">
         <Box className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-12">
           <Box className="grid grid-cols-1 md:grid-cols-3 gap-8">
             <Box>
