@@ -53,16 +53,16 @@ export default function ProfilePage() {
     <Box className="space-y-8">
       {/* Header */}
       <Box>
-        <Typography variant="h3" className="!font-bold !text-slate-900">
+        <Typography variant="h3" className="!font-bold !text-white">
           My Profile
         </Typography>
-        <Typography variant="body1" className="!text-slate-600 !mt-1">
+        <Typography variant="body1" className="!text-white/70 !mt-1">
           Manage your account information and preferences
         </Typography>
       </Box>
 
       {/* Profile Card */}
-      <Card className="!rounded-2xl !shadow-lg !overflow-hidden">
+      <Card className="!rounded-2xl !shadow-xl !overflow-hidden !bg-slate-800/50 !backdrop-blur-lg !border !border-white/10">
         {/* Header Section */}
         <Box className="bg-gradient-to-r from-blue-500 to-blue-600 p-8 text-white">
           <Grid container spacing={3} alignItems="center">
@@ -121,13 +121,13 @@ export default function ProfilePage() {
         </Box>
 
         {/* Stats Grid */}
-        <Box className="grid grid-cols-2 md:grid-cols-4 gap-4 p-6 border-b border-slate-200">
+        <Box className="grid grid-cols-2 md:grid-cols-4 gap-4 p-6 border-b border-white/10 bg-slate-900/30">
           {stats.map((stat, index) => (
             <Box key={index} className="text-center">
-              <Typography variant="h4" className="!font-bold !text-slate-900">
+              <Typography variant="h4" className="!font-bold !text-white">
                 {stat.value}
               </Typography>
-              <Typography variant="body2" className="!text-slate-500 !mt-1">
+              <Typography variant="body2" className="!text-white/70 !mt-1">
                 {stat.label}
               </Typography>
             </Box>
@@ -136,15 +136,15 @@ export default function ProfilePage() {
 
         {/* Form Section */}
         <CardContent className="!p-8 space-y-6">
-          <Typography variant="h5" className="!font-bold !text-slate-900">
+          <Typography variant="h5" className="!font-bold !text-white">
             Personal Information
           </Typography>
 
           <Grid container spacing={3}>
             <Grid item xs={12} md={6}>
               <Box className="flex items-center gap-2 mb-2">
-                <Person className="!text-slate-500" />
-                <Typography variant="subtitle2" className="!font-semibold !text-slate-700">
+                <Person className="!text-white/50" />
+                <Typography variant="subtitle2" className="!font-semibold !text-white/70">
                   Full Name
                 </Typography>
               </Box>
@@ -156,10 +156,24 @@ export default function ProfilePage() {
                   onChange={handleInputChange}
                   variant="outlined"
                   className="!rounded-xl"
+                  sx={{
+                    "& .MuiOutlinedInput-root": {
+                      color: "white",
+                      "& fieldset": {
+                        borderColor: "rgba(255, 255, 255, 0.1)",
+                      },
+                      "&:hover fieldset": {
+                        borderColor: "rgba(255, 255, 255, 0.2)",
+                      },
+                      "&.Mui-focused fieldset": {
+                        borderColor: "rgba(59, 130, 246, 0.5)",
+                      },
+                    },
+                  }}
                 />
               ) : (
-                <Box className="px-4 py-3 bg-slate-50 rounded-xl">
-                  <Typography variant="body1" className="!text-slate-900">
+                <Box className="px-4 py-3 bg-slate-900/50 rounded-xl border border-white/10">
+                  <Typography variant="body1" className="!text-white">
                     {formData.name}
                   </Typography>
                 </Box>
@@ -168,8 +182,8 @@ export default function ProfilePage() {
 
             <Grid item xs={12} md={6}>
               <Box className="flex items-center gap-2 mb-2">
-                <Email className="!text-slate-500" />
-                <Typography variant="subtitle2" className="!font-semibold !text-slate-700">
+                <Email className="!text-white/50" />
+                <Typography variant="subtitle2" className="!font-semibold !text-white/70">
                   Email Address
                 </Typography>
               </Box>
@@ -182,10 +196,24 @@ export default function ProfilePage() {
                   onChange={handleInputChange}
                   variant="outlined"
                   className="!rounded-xl"
+                  sx={{
+                    "& .MuiOutlinedInput-root": {
+                      color: "white",
+                      "& fieldset": {
+                        borderColor: "rgba(255, 255, 255, 0.1)",
+                      },
+                      "&:hover fieldset": {
+                        borderColor: "rgba(255, 255, 255, 0.2)",
+                      },
+                      "&.Mui-focused fieldset": {
+                        borderColor: "rgba(59, 130, 246, 0.5)",
+                      },
+                    },
+                  }}
                 />
               ) : (
-                <Box className="px-4 py-3 bg-slate-50 rounded-xl">
-                  <Typography variant="body1" className="!text-slate-900">
+                <Box className="px-4 py-3 bg-slate-900/50 rounded-xl border border-white/10">
+                  <Typography variant="body1" className="!text-white">
                     {formData.email}
                   </Typography>
                 </Box>
@@ -194,8 +222,8 @@ export default function ProfilePage() {
 
             <Grid item xs={12} md={6}>
               <Box className="flex items-center gap-2 mb-2">
-                <Phone className="!text-slate-500" />
-                <Typography variant="subtitle2" className="!font-semibold !text-slate-700">
+                <Phone className="!text-white/50" />
+                <Typography variant="subtitle2" className="!font-semibold !text-white/70">
                   Phone Number
                 </Typography>
               </Box>
@@ -208,10 +236,24 @@ export default function ProfilePage() {
                   onChange={handleInputChange}
                   variant="outlined"
                   className="!rounded-xl"
+                  sx={{
+                    "& .MuiOutlinedInput-root": {
+                      color: "white",
+                      "& fieldset": {
+                        borderColor: "rgba(255, 255, 255, 0.1)",
+                      },
+                      "&:hover fieldset": {
+                        borderColor: "rgba(255, 255, 255, 0.2)",
+                      },
+                      "&.Mui-focused fieldset": {
+                        borderColor: "rgba(59, 130, 246, 0.5)",
+                      },
+                    },
+                  }}
                 />
               ) : (
-                <Box className="px-4 py-3 bg-slate-50 rounded-xl">
-                  <Typography variant="body1" className="!text-slate-900">
+                <Box className="px-4 py-3 bg-slate-900/50 rounded-xl border border-white/10">
+                  <Typography variant="body1" className="!text-white">
                     {formData.phone}
                   </Typography>
                 </Box>
@@ -220,8 +262,8 @@ export default function ProfilePage() {
 
             <Grid item xs={12} md={6}>
               <Box className="flex items-center gap-2 mb-2">
-                <CreditCard className="!text-slate-500" />
-                <Typography variant="subtitle2" className="!font-semibold !text-slate-700">
+                <CreditCard className="!text-white/50" />
+                <Typography variant="subtitle2" className="!font-semibold !text-white/70">
                   License Number
                 </Typography>
               </Box>
@@ -233,10 +275,24 @@ export default function ProfilePage() {
                   onChange={handleInputChange}
                   variant="outlined"
                   className="!rounded-xl"
+                  sx={{
+                    "& .MuiOutlinedInput-root": {
+                      color: "white",
+                      "& fieldset": {
+                        borderColor: "rgba(255, 255, 255, 0.1)",
+                      },
+                      "&:hover fieldset": {
+                        borderColor: "rgba(255, 255, 255, 0.2)",
+                      },
+                      "&.Mui-focused fieldset": {
+                        borderColor: "rgba(59, 130, 246, 0.5)",
+                      },
+                    },
+                  }}
                 />
               ) : (
-                <Box className="px-4 py-3 bg-slate-50 rounded-xl">
-                  <Typography variant="body1" className="!text-slate-900">
+                <Box className="px-4 py-3 bg-slate-900/50 rounded-xl border border-white/10">
+                  <Typography variant="body1" className="!text-white">
                     {formData.licenseNumber}
                   </Typography>
                 </Box>
@@ -245,8 +301,8 @@ export default function ProfilePage() {
 
             <Grid item xs={12}>
               <Box className="flex items-center gap-2 mb-2">
-                <Home className="!text-slate-500" />
-                <Typography variant="subtitle2" className="!font-semibold !text-slate-700">
+                <Home className="!text-white/50" />
+                <Typography variant="subtitle2" className="!font-semibold !text-white/70">
                   Address
                 </Typography>
               </Box>
@@ -258,10 +314,24 @@ export default function ProfilePage() {
                   onChange={handleInputChange}
                   variant="outlined"
                   className="!rounded-xl"
+                  sx={{
+                    "& .MuiOutlinedInput-root": {
+                      color: "white",
+                      "& fieldset": {
+                        borderColor: "rgba(255, 255, 255, 0.1)",
+                      },
+                      "&:hover fieldset": {
+                        borderColor: "rgba(255, 255, 255, 0.2)",
+                      },
+                      "&.Mui-focused fieldset": {
+                        borderColor: "rgba(59, 130, 246, 0.5)",
+                      },
+                    },
+                  }}
                 />
               ) : (
-                <Box className="px-4 py-3 bg-slate-50 rounded-xl">
-                  <Typography variant="body1" className="!text-slate-900">
+                <Box className="px-4 py-3 bg-slate-900/50 rounded-xl border border-white/10">
+                  <Typography variant="body1" className="!text-white">
                     {formData.address}
                   </Typography>
                 </Box>
@@ -272,29 +342,29 @@ export default function ProfilePage() {
       </Card>
 
       {/* Preferences Section */}
-      <Card className="!rounded-2xl !shadow-lg">
+      <Card className="!rounded-2xl !shadow-xl !bg-slate-800/50 !backdrop-blur-lg !border !border-white/10">
         <CardContent className="!p-8">
-          <Typography variant="h5" className="!font-bold !text-slate-900 !mb-6">
+          <Typography variant="h5" className="!font-bold !text-white !mb-6">
             Preferences
           </Typography>
           <Box className="space-y-4">
-            <Box className="flex items-center justify-between p-4 rounded-xl bg-slate-50">
+            <Box className="flex items-center justify-between p-4 rounded-xl bg-slate-900/50 border border-white/10">
               <Box>
-                <Typography variant="subtitle1" className="!font-semibold !text-slate-900">
+                <Typography variant="subtitle1" className="!font-semibold !text-white">
                   Email Notifications
                 </Typography>
-                <Typography variant="body2" className="!text-slate-500">
+                <Typography variant="body2" className="!text-white/70">
                   Receive updates about your bookings
                 </Typography>
               </Box>
               <FormControlLabel control={<Switch defaultChecked />} label="" className="!m-0" />
             </Box>
-            <Box className="flex items-center justify-between p-4 rounded-xl bg-slate-50">
+            <Box className="flex items-center justify-between p-4 rounded-xl bg-slate-900/50 border border-white/10">
               <Box>
-                <Typography variant="subtitle1" className="!font-semibold !text-slate-900">
+                <Typography variant="subtitle1" className="!font-semibold !text-white">
                   SMS Notifications
                 </Typography>
-                <Typography variant="body2" className="!text-slate-500">
+                <Typography variant="body2" className="!text-white/70">
                   Get text alerts for important updates
                 </Typography>
               </Box>

@@ -127,16 +127,16 @@ export default function CarsPage() {
     <Box className="space-y-8">
       {/* Header */}
       <Box className="space-y-4">
-        <Typography variant="h3" className="!font-bold !text-slate-900">
+        <Typography variant="h3" className="!font-bold !text-white">
           Available Cars
         </Typography>
-        <Typography variant="body1" className="!text-slate-600">
+        <Typography variant="body1" className="!text-white/70">
           Filter by category, search by name, or browse our entire fleet.
         </Typography>
       </Box>
 
       {/* Search Bar */}
-      <Card className="!rounded-2xl !shadow-lg">
+      <Card className="!rounded-2xl !shadow-xl !bg-slate-800/50 !backdrop-blur-lg !border !border-white/10">
         <CardContent className="!p-4">
           <TextField
             fullWidth
@@ -146,18 +146,35 @@ export default function CarsPage() {
             InputProps={{
               startAdornment: (
                 <InputAdornment position="start">
-                  <Search className="!text-slate-400" />
+                  <Search className="!text-white/50" />
                 </InputAdornment>
               ),
               endAdornment: (
                 <InputAdornment position="end">
-                  <IconButton>
+                  <IconButton className="!text-white/50">
                     <FilterList />
                   </IconButton>
                 </InputAdornment>
               ),
             }}
-            className="!bg-slate-50"
+            sx={{
+              "& .MuiOutlinedInput-root": {
+                color: "white",
+                "& fieldset": {
+                  borderColor: "rgba(255, 255, 255, 0.1)",
+                },
+                "&:hover fieldset": {
+                  borderColor: "rgba(255, 255, 255, 0.2)",
+                },
+                "&.Mui-focused fieldset": {
+                  borderColor: "rgba(59, 130, 246, 0.5)",
+                },
+              },
+              "& .MuiInputBase-input::placeholder": {
+                color: "rgba(255, 255, 255, 0.4)",
+              },
+            }}
+            className="!bg-slate-900/50"
           />
         </CardContent>
       </Card>
@@ -172,7 +189,7 @@ export default function CarsPage() {
             className={
               selectedCategory === category
                 ? "!bg-blue-500 !text-white !font-semibold"
-                : "!bg-white !text-slate-700 hover:!bg-slate-100"
+                : "!bg-slate-700/50 !text-white/70 hover:!bg-slate-700"
             }
             clickable
           />
@@ -180,8 +197,8 @@ export default function CarsPage() {
       </Box>
 
       {/* Results Count */}
-      <Typography variant="body2" className="!text-slate-600">
-        Showing <span className="!font-semibold !text-slate-900">{filteredCars.length}</span> of{" "}
+      <Typography variant="body2" className="!text-white/70">
+        Showing <span className="!font-semibold !text-white">{filteredCars.length}</span> of{" "}
         {cars.length} cars
       </Typography>
 
@@ -189,34 +206,34 @@ export default function CarsPage() {
       <Grid container spacing={3}>
         {filteredCars.map((car) => (
           <Grid item xs={12} sm={6} lg={4} key={car.id}>
-            <Card className="!rounded-2xl !shadow-lg hover:!shadow-xl !transition-all !transform hover:!-translate-y-1 !h-full">
+            <Card className="!rounded-2xl !shadow-xl hover:!shadow-2xl !transition-all !transform hover:!-translate-y-1 !h-full !bg-slate-800/50 !backdrop-blur-lg !border !border-white/10">
               {/* Car Image */}
               <Box className="relative">
-                <Box className="flex h-48 items-center justify-center bg-gradient-to-br from-slate-100 to-slate-200 text-7xl">
+                <Box className="flex h-48 items-center justify-center bg-gradient-to-br from-slate-700 to-slate-800 text-7xl">
                   {car.image}
                 </Box>
                 <IconButton
                   size="small"
-                  className="!absolute !top-3 !right-3 !bg-white/90 hover:!bg-white !shadow-md"
+                  className="!absolute !top-3 !right-3 !bg-slate-800/90 hover:!bg-slate-700 !shadow-md"
                   onClick={(e) => handleToggleFavorite(car.id, e)}
                 >
                   {favorites.includes(car.id) ? (
                     <Favorite className="!text-rose-500" />
                   ) : (
-                    <FavoriteBorder className="!text-slate-400" />
+                    <FavoriteBorder className="!text-white/50" />
                   )}
                 </IconButton>
                 <Chip
                   label={car.category}
                   size="small"
-                  className="!absolute !top-3 !left-3 !bg-white/90 !font-semibold"
+                  className="!absolute !top-3 !left-3 !bg-slate-800/90 !font-semibold !text-white"
                 />
               </Box>
 
               {/* Car Info */}
               <CardContent className="!p-4 space-y-3">
                 <Box>
-                  <Typography variant="h6" className="!font-bold !text-slate-900 !mb-1">
+                  <Typography variant="h6" className="!font-bold !text-white !mb-1">
                     {car.name}
                   </Typography>
                 </Box>
@@ -224,7 +241,7 @@ export default function CarsPage() {
                 <Box className="flex items-center justify-between">
                   <Box className="flex items-center gap-1">
                     <Star className="!text-amber-400 !text-lg" />
-                    <Typography variant="body2" className="!font-medium !text-slate-700">
+                    <Typography variant="body2" className="!font-medium !text-white/70">
                       {car.rating}
                     </Typography>
                   </Box>
@@ -234,18 +251,18 @@ export default function CarsPage() {
                     size="small"
                     className={
                       car.status === "Available"
-                        ? "!bg-emerald-100 !text-emerald-700"
-                        : "!bg-rose-100 !text-rose-700"
+                        ? "!bg-emerald-500/20 !text-emerald-400 !border !border-emerald-500/30"
+                        : "!bg-rose-500/20 !text-rose-400 !border !border-rose-500/30"
                     }
                   />
                 </Box>
 
                 <Box className="space-y-2">
                   <Box className="flex items-center justify-between">
-                    <Typography variant="h5" className="!font-bold !text-blue-600">
+                    <Typography variant="h5" className="!font-bold !text-blue-400">
                       ${car.price}
                     </Typography>
-                    <Typography variant="body2" className="!text-slate-500">
+                    <Typography variant="body2" className="!text-white/50">
                       /day
                     </Typography>
                   </Box>
@@ -258,7 +275,7 @@ export default function CarsPage() {
                       key={idx}
                       label={feature}
                       size="small"
-                      className="!bg-slate-100 !text-slate-600"
+                      className="!bg-slate-700/50 !text-white/70"
                     />
                   ))}
                 </Box>
@@ -270,7 +287,7 @@ export default function CarsPage() {
                     fullWidth
                     startIcon={<Visibility />}
                     onClick={() => handleViewDetails(car.id)}
-                    className="!border-blue-500 !text-blue-600 hover:!bg-blue-50 !rounded-xl"
+                    className="!border-blue-500/50 !text-blue-400 hover:!bg-blue-500/20 !rounded-xl"
                   >
                     View
                   </Button>
@@ -292,9 +309,9 @@ export default function CarsPage() {
       </Grid>
 
       {filteredCars.length === 0 && (
-        <Card className="!text-center !py-12">
+        <Card className="!text-center !py-12 !bg-slate-800/50 !backdrop-blur-lg !border !border-white/10">
           <CardContent>
-            <Typography variant="body1" className="!text-slate-500 !text-lg !mb-4">
+            <Typography variant="body1" className="!text-white/70 !text-lg !mb-4">
               No cars found matching your criteria.
             </Typography>
             <Button
@@ -303,7 +320,7 @@ export default function CarsPage() {
                 setSelectedCategory("All");
                 setSearchQuery("");
               }}
-              className="!text-blue-600 !border-blue-600 hover:!bg-blue-50"
+              className="!text-blue-400 !border-blue-500/50 hover:!bg-blue-500/20"
             >
               Clear filters
             </Button>

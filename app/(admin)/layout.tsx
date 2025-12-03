@@ -23,12 +23,49 @@ export default function AdminLayout({
     }
   }, [isAuthenticated, user, isLoading, router]);
 
+  useEffect(() => {
+    // Sync main content margin with sidebar state
+    const updateMargin = () => {
+      const sidebar = document.querySelector(".sidebar-container");
+      const mainContent = document.querySelector(".admin-main-content");
+      if (sidebar && mainContent) {
+        const isCollapsed = sidebar.classList.contains("collapsed");
+        if (isCollapsed) {
+          mainContent.classList.add("collapsed");
+        } else {
+          mainContent.classList.remove("collapsed");
+        }
+      }
+    };
+
+    // Initial check
+    updateMargin();
+
+    // Watch for sidebar changes
+    const observer = new MutationObserver(updateMargin);
+    const sidebar = document.querySelector(".sidebar-container");
+    if (sidebar) {
+      observer.observe(sidebar, {
+        attributes: true,
+        attributeFilter: ["class"],
+      });
+    }
+
+    // Also listen for storage events
+    window.addEventListener("sidebarToggle", updateMargin);
+
+    return () => {
+      observer.disconnect();
+      window.removeEventListener("sidebarToggle", updateMargin);
+    };
+  }, []);
+
   if (isLoading) {
     return (
-      <Box className="flex min-h-screen items-center justify-center bg-gradient-to-br from-slate-50 to-blue-50">
+      <Box className="flex min-h-screen items-center justify-center bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900">
         <Box className="text-center">
-          <CircularProgress className="!text-blue-600" />
-          <Typography variant="body1" className="!mt-4 !text-slate-600">
+          <CircularProgress className="!text-blue-500" />
+          <Typography variant="body1" className="!mt-4 !text-white">
             Loading...
           </Typography>
         </Box>
@@ -41,15 +78,30 @@ export default function AdminLayout({
   }
 
   return (
-    <Box className="flex min-h-screen bg-gradient-to-br from-slate-50 to-blue-50">
-      <AdminSidebar />
-      <Box
-        component="main"
-        className="flex-1 p-4 md:p-8 pt-16 md:pt-8"
-        sx={{ marginLeft: { md: "280px" } }}
-      >
-        <Box className="mx-auto max-w-7xl">{children}</Box>
+    <>
+      <style jsx global>{`
+        .admin-main-content {
+          margin-left: 280px;
+          transition: margin-left 0.4s ease;
+        }
+        .admin-main-content.collapsed {
+          margin-left: 80px;
+        }
+        @media (max-width: 768px) {
+          .admin-main-content {
+            margin-left: 0 !important;
+          }
+        }
+      `}</style>
+      <Box className="flex min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900">
+        <AdminSidebar />
+        <Box
+          component="main"
+          className="flex-1 p-4 md:p-8 pt-16 md:pt-8 admin-main-content"
+        >
+          <Box className="mx-auto max-w-7xl">{children}</Box>
+        </Box>
       </Box>
-    </Box>
+    </>
   );
 }

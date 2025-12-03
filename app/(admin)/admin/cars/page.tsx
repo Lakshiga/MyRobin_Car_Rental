@@ -112,10 +112,10 @@ export default function AdminCarsPage() {
       {/* Header */}
       <Box className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <Box>
-          <Typography variant="h3" className="!font-bold !text-slate-900">
+          <Typography variant="h3" className="!font-bold !text-white">
             Cars Management
           </Typography>
-          <Typography variant="body1" className="!text-slate-600 !mt-1">
+          <Typography variant="body1" className="!text-white/70 !mt-1">
             Manage your fleet of vehicles
           </Typography>
         </Box>
@@ -130,7 +130,7 @@ export default function AdminCarsPage() {
       </Box>
 
       {/* Search and Filters */}
-      <Card className="!rounded-2xl !shadow-lg">
+      <Card className="!rounded-2xl !shadow-xl !bg-slate-800/50 !backdrop-blur-lg !border !border-white/10">
         <CardContent className="!p-4">
           <Box className="flex flex-col sm:flex-row gap-4">
             <TextField
@@ -141,13 +141,30 @@ export default function AdminCarsPage() {
               InputProps={{
                 startAdornment: (
                   <InputAdornment position="start">
-                    <Search className="!text-slate-400" />
+                    <Search className="!text-white/50" />
                   </InputAdornment>
                 ),
               }}
-              className="!bg-slate-50"
+              className="!bg-slate-900/50"
+              sx={{
+                "& .MuiOutlinedInput-root": {
+                  color: "white",
+                  "& fieldset": {
+                    borderColor: "rgba(255, 255, 255, 0.1)",
+                  },
+                  "&:hover fieldset": {
+                    borderColor: "rgba(255, 255, 255, 0.2)",
+                  },
+                  "&.Mui-focused fieldset": {
+                    borderColor: "rgba(59, 130, 246, 0.5)",
+                  },
+                },
+                "& .MuiInputBase-input::placeholder": {
+                  color: "rgba(255, 255, 255, 0.4)",
+                },
+              }}
             />
-            <Box className="flex gap-2">
+            <Box className="flex gap-2 flex-wrap">
               {categories.map((category) => (
                 <Chip
                   key={category}
@@ -156,7 +173,7 @@ export default function AdminCarsPage() {
                   className={
                     selectedCategory === category
                       ? "!bg-blue-500 !text-white !font-semibold"
-                      : "!bg-white !text-slate-700 hover:!bg-slate-100"
+                      : "!bg-slate-700/50 !text-white/70 hover:!bg-slate-700"
                   }
                   clickable
                 />
@@ -170,9 +187,9 @@ export default function AdminCarsPage() {
       <Grid container spacing={3}>
         {filteredCars.map((car) => (
           <Grid item xs={12} sm={6} lg={4} key={car.id}>
-            <Card className="!rounded-2xl !shadow-lg hover:!shadow-xl !transition-all">
+            <Card className="!rounded-2xl !shadow-xl hover:!shadow-2xl !transition-all !bg-slate-800/50 !backdrop-blur-lg !border !border-white/10">
               <Box className="relative">
-                <Box className="flex h-48 items-center justify-center bg-gradient-to-br from-slate-100 to-slate-200 text-7xl rounded-t-2xl">
+                <Box className="flex h-48 items-center justify-center bg-gradient-to-br from-slate-700 to-slate-800 text-7xl rounded-t-2xl">
                   {car.image}
                 </Box>
                 <Chip
@@ -181,25 +198,25 @@ export default function AdminCarsPage() {
                   icon={car.status === "Available" ? <CheckCircle /> : <Cancel />}
                   className={`!absolute !top-3 !right-3 ${
                     car.status === "Available"
-                      ? "!bg-emerald-100 !text-emerald-700"
+                      ? "!bg-emerald-500/20 !text-emerald-400 !border !border-emerald-500/30"
                       : car.status === "Maintenance"
-                        ? "!bg-amber-100 !text-amber-700"
-                        : "!bg-rose-100 !text-rose-700"
+                        ? "!bg-amber-500/20 !text-amber-400 !border !border-amber-500/30"
+                        : "!bg-rose-500/20 !text-rose-400 !border !border-rose-500/30"
                   }`}
                 />
               </Box>
               <CardContent className="!p-4">
-                <Typography variant="h6" className="!font-bold !text-slate-900 !mb-2">
+                <Typography variant="h6" className="!font-bold !text-white !mb-2">
                   {car.name}
                 </Typography>
                 <Box className="flex items-center justify-between mb-3">
                   <Box className="flex items-center gap-1">
                     <Star className="!text-amber-400" />
-                    <Typography variant="body2" className="!font-medium">
+                    <Typography variant="body2" className="!font-medium !text-white/70">
                       {car.rating}
                     </Typography>
                   </Box>
-                  <Typography variant="h6" className="!font-bold !text-blue-600">
+                  <Typography variant="h6" className="!font-bold !text-blue-400">
                     ${car.price}/day
                   </Typography>
                 </Box>
@@ -209,7 +226,7 @@ export default function AdminCarsPage() {
                     size="small"
                     startIcon={<Edit />}
                     onClick={() => handleEdit(car.id)}
-                    className="!flex-1"
+                    className="!flex-1 !border-white/20 !text-white hover:!bg-white/10"
                   >
                     Edit
                   </Button>
@@ -218,7 +235,7 @@ export default function AdminCarsPage() {
                     size="small"
                     startIcon={<Delete />}
                     onClick={() => handleDelete(car.id)}
-                    className="!text-rose-600 !border-rose-600"
+                    className="!text-rose-400 !border-rose-500/30 hover:!bg-rose-500/20"
                   >
                     Delete
                   </Button>
@@ -231,4 +248,3 @@ export default function AdminCarsPage() {
     </Box>
   );
 }
-

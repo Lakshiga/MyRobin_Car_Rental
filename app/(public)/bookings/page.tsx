@@ -79,13 +79,13 @@ export default function BookingsPage() {
   const getStatusColor = (status: string) => {
     switch (status) {
       case "Upcoming":
-        return { bg: "!bg-amber-100", text: "!text-amber-700", border: "!border-amber-300" };
+        return { bg: "!bg-amber-500/20", text: "!text-amber-400", border: "!border-amber-500/30" };
       case "On Going":
-        return { bg: "!bg-blue-100", text: "!text-blue-700", border: "!border-blue-300" };
+        return { bg: "!bg-blue-500/20", text: "!text-blue-400", border: "!border-blue-500/30" };
       case "Completed":
-        return { bg: "!bg-emerald-100", text: "!text-emerald-700", border: "!border-emerald-300" };
+        return { bg: "!bg-emerald-500/20", text: "!text-emerald-400", border: "!border-emerald-500/30" };
       default:
-        return { bg: "!bg-slate-100", text: "!text-slate-700", border: "!border-slate-300" };
+        return { bg: "!bg-slate-500/20", text: "!text-slate-400", border: "!border-slate-500/30" };
     }
   };
 
@@ -119,10 +119,10 @@ export default function BookingsPage() {
       {/* Header */}
       <Box className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <Box>
-          <Typography variant="h3" className="!font-bold !text-slate-900">
+          <Typography variant="h3" className="!font-bold !text-white">
             My Bookings
           </Typography>
-          <Typography variant="body1" className="!text-slate-600 !mt-1">
+          <Typography variant="body1" className="!text-white/70 !mt-1">
             Manage and track your car rental bookings
           </Typography>
         </Box>
@@ -146,7 +146,7 @@ export default function BookingsPage() {
             className={
               selectedStatus === status
                 ? "!bg-blue-500 !text-white !font-semibold"
-                : "!bg-white !text-slate-700 hover:!bg-slate-100"
+                : "!bg-slate-700/50 !text-white/70 hover:!bg-slate-700"
             }
             clickable
           />
@@ -160,12 +160,12 @@ export default function BookingsPage() {
             const statusColors = getStatusColor(booking.status);
             return (
               <Grid item xs={12} key={booking.id}>
-                <Card className="!rounded-2xl !shadow-lg hover:!shadow-xl !transition-all">
+                <Card className="!rounded-2xl !shadow-xl hover:!shadow-2xl !transition-all !bg-slate-800/50 !backdrop-blur-lg !border !border-white/10">
                   <CardContent className="!p-6">
                     <Grid container spacing={3}>
                       {/* Car Image */}
                       <Grid item xs={12} sm={4} md={3}>
-                        <Box className="flex h-48 sm:h-full items-center justify-center rounded-xl bg-gradient-to-br from-slate-100 to-slate-200 text-6xl">
+                        <Box className="flex h-48 sm:h-full items-center justify-center rounded-xl bg-gradient-to-br from-slate-700 to-slate-800 text-6xl">
                           {booking.image}
                         </Box>
                       </Grid>
@@ -175,10 +175,10 @@ export default function BookingsPage() {
                         <Box className="space-y-4">
                           <Box className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-4">
                             <Box>
-                              <Typography variant="h5" className="!font-bold !text-slate-900 !mb-1">
+                              <Typography variant="h5" className="!font-bold !text-white !mb-1">
                                 {booking.car}
                               </Typography>
-                              <Typography variant="body2" className="!text-slate-500">
+                              <Typography variant="body2" className="!text-white/50">
                                 Booking ID: {booking.bookingId}
                               </Typography>
                             </Box>
@@ -200,30 +200,30 @@ export default function BookingsPage() {
                           {/* Dates */}
                           <Grid container spacing={2}>
                             <Grid item xs={12} sm={6}>
-                              <Card className="!bg-slate-50">
+                              <Card className="!bg-slate-900/50">
                                 <CardContent className="!p-3">
-                                  <Typography variant="caption" className="!text-slate-500 !mb-1">
+                                  <Typography variant="caption" className="!text-white/50 !mb-1">
                                     Pickup
                                   </Typography>
-                                  <Typography variant="body1" className="!font-semibold !text-slate-900">
+                                  <Typography variant="body1" className="!font-semibold !text-white">
                                     {booking.pickupDate}
                                   </Typography>
-                                  <Typography variant="body2" className="!text-slate-600">
+                                  <Typography variant="body2" className="!text-white/70">
                                     {booking.pickupTime}
                                   </Typography>
                                 </CardContent>
                               </Card>
                             </Grid>
                             <Grid item xs={12} sm={6}>
-                              <Card className="!bg-slate-50">
+                              <Card className="!bg-slate-900/50">
                                 <CardContent className="!p-3">
-                                  <Typography variant="caption" className="!text-slate-500 !mb-1">
+                                  <Typography variant="caption" className="!text-white/50 !mb-1">
                                     Dropoff
                                   </Typography>
-                                  <Typography variant="body1" className="!font-semibold !text-slate-900">
+                                  <Typography variant="body1" className="!font-semibold !text-white">
                                     {booking.dropoffDate}
                                   </Typography>
-                                  <Typography variant="body2" className="!text-slate-600">
+                                  <Typography variant="body2" className="!text-white/70">
                                     {booking.dropoffTime}
                                   </Typography>
                                 </CardContent>
@@ -232,12 +232,12 @@ export default function BookingsPage() {
                           </Grid>
 
                           {/* Amount and Actions */}
-                          <Box className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 pt-4 border-t border-slate-200">
+                          <Box className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 pt-4 border-t border-white/10">
                             <Box>
-                              <Typography variant="caption" className="!text-slate-500">
+                              <Typography variant="caption" className="!text-white/50">
                                 Total Amount
                               </Typography>
-                              <Typography variant="h5" className="!font-bold !text-blue-600">
+                              <Typography variant="h5" className="!font-bold !text-blue-400">
                                 ${booking.totalAmount}
                               </Typography>
                             </Box>
@@ -246,7 +246,7 @@ export default function BookingsPage() {
                                 variant="outlined"
                                 startIcon={<Visibility />}
                                 onClick={() => handleViewDetails(booking.bookingId)}
-                                className="!border-slate-300 !text-slate-700 hover:!bg-slate-100 !rounded-xl"
+                                className="!border-white/20 !text-white/70 hover:!bg-white/10 !rounded-xl"
                               >
                                 View Details
                               </Button>
@@ -272,15 +272,15 @@ export default function BookingsPage() {
           })}
         </Grid>
       ) : (
-        <Card className="!text-center !py-12">
+        <Card className="!text-center !py-12 !bg-slate-800/50 !backdrop-blur-lg !border !border-white/10">
           <CardContent>
-            <Typography variant="body1" className="!text-slate-500 !text-lg !mb-4">
+            <Typography variant="body1" className="!text-white/70 !text-lg !mb-4">
               No bookings found.
             </Typography>
             <Button
               variant="outlined"
               onClick={() => setSelectedStatus("All")}
-              className="!text-blue-600 !border-blue-600 hover:!bg-blue-50"
+              className="!text-blue-400 !border-blue-500/50 hover:!bg-blue-500/20"
             >
               View all bookings
             </Button>
@@ -294,13 +294,13 @@ export default function BookingsPage() {
           open={cancelDialogOpen}
           onClose={() => setCancelDialogOpen(false)}
           PaperProps={{
-            className: "!rounded-2xl",
+            className: "!rounded-2xl !bg-slate-800 !border !border-white/10",
             sx: { minWidth: "300px" },
           }}
         >
-          <DialogTitle sx={{ fontWeight: 600 }}>Cancel Booking</DialogTitle>
+          <DialogTitle sx={{ fontWeight: 600, color: "white" }}>Cancel Booking</DialogTitle>
           <DialogContent>
-            <Typography>
+            <Typography sx={{ color: "rgba(255, 255, 255, 0.7)" }}>
               Are you sure you want to cancel this booking? This action cannot be undone.
             </Typography>
           </DialogContent>
@@ -308,7 +308,7 @@ export default function BookingsPage() {
             <Button
               onClick={() => setCancelDialogOpen(false)}
               variant="outlined"
-              className="!text-slate-700 !border-slate-300"
+              className="!text-white/70 !border-white/20"
             >
               Keep Booking
             </Button>

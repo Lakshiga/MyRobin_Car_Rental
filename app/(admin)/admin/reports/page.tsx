@@ -41,10 +41,10 @@ export default function AdminReportsPage() {
     <Box className="space-y-8">
       {/* Header */}
       <Box>
-        <Typography variant="h3" className="!font-bold !text-slate-900">
+        <Typography variant="h3" className="!font-bold !text-white">
           Reports
         </Typography>
-        <Typography variant="body1" className="!text-slate-600 !mt-1">
+        <Typography variant="body1" className="!text-white/70 !mt-1">
           Download monthly performance summaries and fleet utilization reports.
         </Typography>
       </Box>
@@ -53,20 +53,20 @@ export default function AdminReportsPage() {
       <Grid container spacing={3}>
         {reports.map((report) => (
           <Grid item xs={12} sm={6} md={4} key={report.id}>
-            <Card className="!rounded-2xl !shadow-lg hover:!shadow-xl !transition-all !h-full">
+            <Card className="!rounded-2xl !shadow-xl hover:!shadow-2xl !transition-all !h-full !bg-slate-800/50 !backdrop-blur-lg !border !border-white/10">
               <CardContent className="!p-6">
                 <Box className="flex items-start gap-4 mb-4">
                   <Box
                     className={`flex h-12 w-12 items-center justify-center rounded-xl ${
                       report.accent === "emerald"
-                        ? "bg-emerald-100 text-emerald-600"
-                        : "bg-slate-100 text-slate-600"
+                        ? "bg-emerald-500/20 text-emerald-400 border border-emerald-500/30"
+                        : "bg-slate-500/20 text-slate-400 border border-slate-500/30"
                     }`}
                   >
                     <Description className="!text-2xl" />
                   </Box>
                   <Box className="flex-1">
-                    <Typography variant="h6" className="!font-bold !text-slate-900 !mb-1">
+                    <Typography variant="h6" className="!font-bold !text-white !mb-1">
                       {report.period}
                     </Typography>
                     <Chip
@@ -75,8 +75,8 @@ export default function AdminReportsPage() {
                       size="small"
                       className={
                         report.status === "Ready"
-                          ? "!bg-emerald-100 !text-emerald-700"
-                          : "!bg-slate-100 !text-slate-700"
+                          ? "!bg-emerald-500/20 !text-emerald-400 !border !border-emerald-500/30"
+                          : "!bg-slate-500/20 !text-slate-400 !border !border-slate-500/30"
                       }
                     />
                   </Box>
@@ -86,7 +86,7 @@ export default function AdminReportsPage() {
                   fullWidth
                   startIcon={<Download />}
                   onClick={() => handleDownload(report.id, report.period)}
-                  className="!border-blue-500 !text-blue-600 hover:!bg-blue-50 !rounded-xl"
+                  className="!border-blue-500/50 !text-blue-400 hover:!bg-blue-500/20 !rounded-xl"
                 >
                   Download
                 </Button>
@@ -98,4 +98,3 @@ export default function AdminReportsPage() {
     </Box>
   );
 }
-

@@ -52,8 +52,8 @@ export default function SignInPage() {
   };
 
   return (
-    <Box className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-50 via-white to-slate-50 py-12 px-4">
-      <Card className="max-w-md w-full !rounded-3xl !shadow-2xl">
+    <Box className="min-h-screen flex items-center justify-center bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 py-12 px-4">
+      <Card className="max-w-md w-full !rounded-3xl !shadow-2xl !bg-slate-800/50 !backdrop-blur-lg !border !border-white/10">
         <CardContent className="!p-8">
           {/* Header */}
           <Box className="text-center mb-8">
@@ -62,10 +62,10 @@ export default function SignInPage() {
                 M
               </Box>
             </Box>
-            <Typography variant="h4" className="!font-bold !text-slate-900">
+            <Typography variant="h4" className="!font-bold !text-white">
               Welcome Back
             </Typography>
-            <Typography variant="body2" className="!text-slate-600 !mt-2">
+            <Typography variant="body2" className="!text-white/70 !mt-2">
               Sign in to your account to continue
             </Typography>
           </Box>
@@ -73,7 +73,7 @@ export default function SignInPage() {
           {/* Form */}
           <Box component="form" onSubmit={handleSubmit} className="space-y-4">
             {error && (
-              <Alert severity="error" className="!rounded-xl">
+              <Alert severity="error" className="!rounded-xl !bg-rose-500/20 !text-rose-400 !border !border-rose-500/30">
                 {error}
               </Alert>
             )}
@@ -87,6 +87,26 @@ export default function SignInPage() {
               required
               className="!rounded-xl"
               variant="outlined"
+              sx={{
+                "& .MuiOutlinedInput-root": {
+                  color: "white",
+                  "& fieldset": {
+                    borderColor: "rgba(255, 255, 255, 0.1)",
+                  },
+                  "&:hover fieldset": {
+                    borderColor: "rgba(255, 255, 255, 0.2)",
+                  },
+                  "&.Mui-focused fieldset": {
+                    borderColor: "rgba(59, 130, 246, 0.5)",
+                  },
+                },
+                "& .MuiInputLabel-root": {
+                  color: "rgba(255, 255, 255, 0.7)",
+                },
+                "& .MuiInputBase-input::placeholder": {
+                  color: "rgba(255, 255, 255, 0.4)",
+                },
+              }}
             />
 
             <TextField
@@ -98,11 +118,28 @@ export default function SignInPage() {
               required
               className="!rounded-xl"
               variant="outlined"
+              sx={{
+                "& .MuiOutlinedInput-root": {
+                  color: "white",
+                  "& fieldset": {
+                    borderColor: "rgba(255, 255, 255, 0.1)",
+                  },
+                  "&:hover fieldset": {
+                    borderColor: "rgba(255, 255, 255, 0.2)",
+                  },
+                  "&.Mui-focused fieldset": {
+                    borderColor: "rgba(59, 130, 246, 0.5)",
+                  },
+                },
+                "& .MuiInputLabel-root": {
+                  color: "rgba(255, 255, 255, 0.7)",
+                },
+              }}
               InputProps={{
                 endAdornment: (
                   <Button
                     onClick={() => setShowPassword(!showPassword)}
-                    className="!min-w-0 !p-1"
+                    className="!min-w-0 !p-1 !text-white/70"
                   >
                     {showPassword ? <VisibilityOff /> : <Visibility />}
                   </Button>
@@ -112,11 +149,10 @@ export default function SignInPage() {
 
             <Box className="flex items-center justify-between">
               <FormControlLabel
-                control={<Checkbox />}
-                label="Remember me"
-                className="!text-sm"
+                control={<Checkbox sx={{ color: "rgba(255, 255, 255, 0.7)" }} />}
+                label={<Typography className="!text-white/70 !text-sm">Remember me</Typography>}
               />
-              <Link href="#" className="text-sm text-blue-600 hover:text-blue-700 font-medium">
+              <Link href="#" className="text-sm text-blue-400 hover:text-blue-300 font-medium">
                 Forgot password?
               </Link>
             </Box>
@@ -135,23 +171,23 @@ export default function SignInPage() {
           </Box>
 
           {/* Admin Credentials Hint */}
-          <Box className="mt-6 p-4 bg-blue-50 rounded-xl border border-blue-200">
-            <Typography variant="caption" className="!font-semibold !text-blue-900 !mb-2 !block">
+          <Box className="mt-6 p-4 bg-blue-500/20 rounded-xl border border-blue-500/30">
+            <Typography variant="caption" className="!font-semibold !text-blue-400 !mb-2 !block">
               Demo Admin Credentials:
             </Typography>
-            <Typography variant="caption" className="!text-blue-700 !block">
+            <Typography variant="caption" className="!text-blue-300 !block">
               Email: admin@myrobin.com
             </Typography>
-            <Typography variant="caption" className="!text-blue-700 !block">
+            <Typography variant="caption" className="!text-blue-300 !block">
               Password: admin123
             </Typography>
           </Box>
 
           {/* Sign Up Link */}
           <Box className="mt-6 text-center">
-            <Typography variant="body2" className="!text-slate-600">
+            <Typography variant="body2" className="!text-white/70">
               Don't have an account?{" "}
-              <Link href="/auth/signup" className="!font-semibold !text-blue-600 hover:!text-blue-700">
+              <Link href="/auth/signup" className="!font-semibold !text-blue-400 hover:!text-blue-300">
                 Sign up
               </Link>
             </Typography>
@@ -161,4 +197,3 @@ export default function SignInPage() {
     </Box>
   );
 }
-

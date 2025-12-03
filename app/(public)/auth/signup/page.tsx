@@ -68,8 +68,8 @@ export default function SignUpPage() {
   };
 
   return (
-    <Box className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-50 via-white to-slate-50 py-12 px-4">
-      <Card className="max-w-md w-full !rounded-3xl !shadow-2xl">
+    <Box className="min-h-screen flex items-center justify-center bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 py-12 px-4">
+      <Card className="max-w-md w-full !rounded-3xl !shadow-2xl !bg-slate-800/50 !backdrop-blur-lg !border !border-white/10">
         <CardContent className="!p-8">
           {/* Header */}
           <Box className="text-center mb-8">
@@ -78,10 +78,10 @@ export default function SignUpPage() {
                 M
               </Box>
             </Box>
-            <Typography variant="h4" className="!font-bold !text-slate-900">
+            <Typography variant="h4" className="!font-bold !text-white">
               Create Account
             </Typography>
-            <Typography variant="body2" className="!text-slate-600 !mt-2">
+            <Typography variant="body2" className="!text-white/70 !mt-2">
               Sign up to get started with MyRobin
             </Typography>
           </Box>
@@ -89,7 +89,7 @@ export default function SignUpPage() {
           {/* Form */}
           <Box component="form" onSubmit={handleSubmit} className="space-y-4">
             {error && (
-              <Alert severity="error" className="!rounded-xl">
+              <Alert severity="error" className="!rounded-xl !bg-rose-500/20 !text-rose-400 !border !border-rose-500/30">
                 {error}
               </Alert>
             )}
@@ -103,6 +103,23 @@ export default function SignUpPage() {
               required
               className="!rounded-xl"
               variant="outlined"
+              sx={{
+                "& .MuiOutlinedInput-root": {
+                  color: "white",
+                  "& fieldset": {
+                    borderColor: "rgba(255, 255, 255, 0.1)",
+                  },
+                  "&:hover fieldset": {
+                    borderColor: "rgba(255, 255, 255, 0.2)",
+                  },
+                  "&.Mui-focused fieldset": {
+                    borderColor: "rgba(59, 130, 246, 0.5)",
+                  },
+                },
+                "& .MuiInputLabel-root": {
+                  color: "rgba(255, 255, 255, 0.7)",
+                },
+              }}
             />
 
             <TextField
@@ -115,6 +132,23 @@ export default function SignUpPage() {
               required
               className="!rounded-xl"
               variant="outlined"
+              sx={{
+                "& .MuiOutlinedInput-root": {
+                  color: "white",
+                  "& fieldset": {
+                    borderColor: "rgba(255, 255, 255, 0.1)",
+                  },
+                  "&:hover fieldset": {
+                    borderColor: "rgba(255, 255, 255, 0.2)",
+                  },
+                  "&.Mui-focused fieldset": {
+                    borderColor: "rgba(59, 130, 246, 0.5)",
+                  },
+                },
+                "& .MuiInputLabel-root": {
+                  color: "rgba(255, 255, 255, 0.7)",
+                },
+              }}
             />
 
             <TextField
@@ -128,11 +162,31 @@ export default function SignUpPage() {
               className="!rounded-xl"
               variant="outlined"
               helperText="Must be at least 6 characters"
+              sx={{
+                "& .MuiOutlinedInput-root": {
+                  color: "white",
+                  "& fieldset": {
+                    borderColor: "rgba(255, 255, 255, 0.1)",
+                  },
+                  "&:hover fieldset": {
+                    borderColor: "rgba(255, 255, 255, 0.2)",
+                  },
+                  "&.Mui-focused fieldset": {
+                    borderColor: "rgba(59, 130, 246, 0.5)",
+                  },
+                },
+                "& .MuiInputLabel-root": {
+                  color: "rgba(255, 255, 255, 0.7)",
+                },
+                "& .MuiFormHelperText-root": {
+                  color: "rgba(255, 255, 255, 0.5)",
+                },
+              }}
               InputProps={{
                 endAdornment: (
                   <Button
                     onClick={() => setShowPassword(!showPassword)}
-                    className="!min-w-0 !p-1"
+                    className="!min-w-0 !p-1 !text-white/70"
                   >
                     {showPassword ? <VisibilityOff /> : <Visibility />}
                   </Button>
@@ -150,18 +204,35 @@ export default function SignUpPage() {
               required
               className="!rounded-xl"
               variant="outlined"
+              sx={{
+                "& .MuiOutlinedInput-root": {
+                  color: "white",
+                  "& fieldset": {
+                    borderColor: "rgba(255, 255, 255, 0.1)",
+                  },
+                  "&:hover fieldset": {
+                    borderColor: "rgba(255, 255, 255, 0.2)",
+                  },
+                  "&.Mui-focused fieldset": {
+                    borderColor: "rgba(59, 130, 246, 0.5)",
+                  },
+                },
+                "& .MuiInputLabel-root": {
+                  color: "rgba(255, 255, 255, 0.7)",
+                },
+              }}
             />
 
             <FormControlLabel
-              control={<Checkbox required />}
+              control={<Checkbox required sx={{ color: "rgba(255, 255, 255, 0.7)" }} />}
               label={
-                <Typography variant="body2">
+                <Typography variant="body2" className="!text-white/70">
                   I agree to the{" "}
-                  <Link href="#" className="!text-blue-600 hover:!text-blue-700 !font-medium">
+                  <Link href="#" className="!text-blue-400 hover:!text-blue-300 !font-medium">
                     Terms of Service
                   </Link>{" "}
                   and{" "}
-                  <Link href="#" className="!text-blue-600 hover:!text-blue-700 !font-medium">
+                  <Link href="#" className="!text-blue-400 hover:!text-blue-300 !font-medium">
                     Privacy Policy
                   </Link>
                 </Typography>
@@ -183,9 +254,9 @@ export default function SignUpPage() {
 
           {/* Sign In Link */}
           <Box className="mt-6 text-center">
-            <Typography variant="body2" className="!text-slate-600">
+            <Typography variant="body2" className="!text-white/70">
               Already have an account?{" "}
-              <Link href="/auth/signin" className="!font-semibold !text-blue-600 hover:!text-blue-700">
+              <Link href="/auth/signin" className="!font-semibold !text-blue-400 hover:!text-blue-300">
                 Sign in
               </Link>
             </Typography>
@@ -195,4 +266,3 @@ export default function SignUpPage() {
     </Box>
   );
 }
-

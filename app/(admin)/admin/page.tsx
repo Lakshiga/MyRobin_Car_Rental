@@ -69,11 +69,11 @@ export default function AdminDashboardPage() {
     <Box className="space-y-8">
       {/* Header */}
       <Box className="mb-8">
-        <Typography variant="h3" className="!font-bold !text-slate-900">
-          Dashboard Overview
+        <Typography variant="h3" className="!font-bold !text-white">
+          Overview
         </Typography>
-        <Typography variant="body1" className="!text-slate-600 !mt-1">
-          Welcome back! Here's what's happening today.
+        <Typography variant="body1" className="!text-white/70 !mt-1">
+          Happening today.
         </Typography>
       </Box>
 
@@ -83,14 +83,14 @@ export default function AdminDashboardPage() {
           const Icon = card.icon;
           return (
             <Grid item xs={12} sm={6} md={4} key={card.label}>
-              <Card className="!rounded-2xl !shadow-lg hover:!shadow-xl !transition-all !h-full">
+              <Card className="!rounded-2xl !shadow-xl hover:!shadow-2xl !transition-all !h-full !bg-slate-800/50 !backdrop-blur-lg !border !border-white/10">
                 <CardContent className="!p-6">
                   <Box className="flex items-start justify-between">
                     <Box className="flex-1">
-                      <Typography variant="body2" className="!font-medium !text-slate-500 !uppercase !tracking-wide !mb-2">
+                      <Typography variant="body2" className="!font-medium !text-white/60 !uppercase !tracking-wide !mb-2">
                         {card.label}
                       </Typography>
-                      <Typography variant="h3" className="!font-bold !text-slate-900 !mb-2">
+                      <Typography variant="h3" className="!font-bold !text-white !mb-2">
                         {card.value}
                       </Typography>
                       <Box className="flex items-center gap-2">
@@ -100,11 +100,11 @@ export default function AdminDashboardPage() {
                           size="small"
                           className={
                             card.changeType === "positive"
-                              ? "!bg-emerald-100 !text-emerald-700"
-                              : "!bg-rose-100 !text-rose-700"
+                              ? "!bg-emerald-500/20 !text-emerald-400 !border !border-emerald-500/30"
+                              : "!bg-rose-500/20 !text-rose-400 !border !border-rose-500/30"
                           }
                         />
-                        <Typography variant="caption" className="!text-slate-500">
+                        <Typography variant="caption" className="!text-white/50">
                           vs last month
                         </Typography>
                       </Box>
@@ -126,25 +126,25 @@ export default function AdminDashboardPage() {
       <Grid container spacing={3}>
         {/* Weekly Bookings Chart */}
         <Grid item xs={12} md={6}>
-          <Card className="!rounded-2xl !shadow-lg">
+          <Card className="!rounded-2xl !shadow-xl !bg-slate-800/50 !backdrop-blur-lg !border !border-white/10">
             <CardContent className="!p-6">
               <Box className="mb-6 flex items-center justify-between">
                 <Box>
-                  <Typography variant="h5" className="!font-bold !text-slate-900">
+                  <Typography variant="h5" className="!font-bold !text-white">
                     Weekly Bookings
                   </Typography>
-                  <Typography variant="body2" className="!text-slate-500 !mt-1">
+                  <Typography variant="body2" className="!text-white/60 !mt-1">
                     This week vs last week
                   </Typography>
                 </Box>
                 <Box className="text-right">
-                  <Typography variant="h4" className="!font-bold !text-slate-900">
+                  <Typography variant="h4" className="!font-bold !text-white">
                     152
                   </Typography>
                   <Chip
                     label="+12.5%"
                     size="small"
-                    className="!bg-emerald-100 !text-emerald-700 !mt-1"
+                    className="!bg-emerald-500/20 !text-emerald-400 !border !border-emerald-500/30 !mt-1"
                     icon={<TrendingUp />}
                   />
                 </Box>
@@ -154,20 +154,20 @@ export default function AdminDashboardPage() {
               <Box className="mb-4 flex items-center gap-6 text-sm">
                 <Box className="flex items-center gap-2">
                   <Box className="h-3 w-3 rounded-full bg-yellow-400 shadow-sm" />
-                  <Typography variant="body2" className="!text-slate-600">
+                  <Typography variant="body2" className="!text-white/70">
                     This Week
                   </Typography>
                 </Box>
                 <Box className="flex items-center gap-2">
-                  <Box className="h-3 w-3 rounded-full bg-slate-300 shadow-sm" />
-                  <Typography variant="body2" className="!text-slate-600">
+                  <Box className="h-3 w-3 rounded-full bg-slate-400 shadow-sm" />
+                  <Typography variant="body2" className="!text-white/70">
                     Last Week
                   </Typography>
                 </Box>
               </Box>
 
               {/* Chart */}
-              <Box className="h-64 rounded-xl bg-gradient-to-b from-slate-50 to-white p-4">
+              <Box className="h-64 rounded-xl bg-slate-900/50 p-4 border border-white/5">
                 <Box className="flex h-full items-end justify-between gap-2">
                   {weeklyData.map((data) => {
                     const thisWeekHeight = (data.thisWeek / 35) * 100;
@@ -176,15 +176,15 @@ export default function AdminDashboardPage() {
                       <Box key={data.day} className="flex-1 flex flex-col items-center gap-2 group">
                         <Box className="relative w-full flex flex-col items-center justify-end h-full">
                           <Box
-                            className="w-full rounded-t-lg bg-slate-300 transition-all group-hover:opacity-80"
+                            className="w-full rounded-t-lg bg-slate-600/50 transition-all group-hover:opacity-80"
                             sx={{ height: `${lastWeekHeight}%` }}
                           />
                           <Box
-                            className="absolute w-full rounded-t-lg bg-yellow-400 transition-all group-hover:opacity-80"
+                            className="absolute w-full rounded-t-lg bg-yellow-400 transition-all group-hover:opacity-80 shadow-lg"
                             sx={{ height: `${thisWeekHeight}%` }}
                           />
                         </Box>
-                        <Typography variant="caption" className="!font-medium !text-slate-600">
+                        <Typography variant="caption" className="!font-medium !text-white/70">
                           {data.day}
                         </Typography>
                       </Box>
@@ -198,32 +198,32 @@ export default function AdminDashboardPage() {
 
         {/* Monthly Earnings Chart */}
         <Grid item xs={12} md={6}>
-          <Card className="!rounded-2xl !shadow-lg">
+          <Card className="!rounded-2xl !shadow-xl !bg-slate-800/50 !backdrop-blur-lg !border !border-white/10">
             <CardContent className="!p-6">
               <Box className="mb-6 flex items-center justify-between">
                 <Box>
-                  <Typography variant="h5" className="!font-bold !text-slate-900">
+                  <Typography variant="h5" className="!font-bold !text-white">
                     Monthly Earnings
                   </Typography>
-                  <Typography variant="body2" className="!text-slate-500 !mt-1">
+                  <Typography variant="body2" className="!text-white/60 !mt-1">
                     Revenue performance this year
                   </Typography>
                 </Box>
                 <Box className="text-right">
-                  <Typography variant="h4" className="!font-bold !text-slate-900">
+                  <Typography variant="h4" className="!font-bold !text-white">
                     $25,824
                   </Typography>
                   <Chip
                     label="+3.5%"
                     size="small"
-                    className="!bg-emerald-100 !text-emerald-700 !mt-1"
+                    className="!bg-emerald-500/20 !text-emerald-400 !border !border-emerald-500/30 !mt-1"
                     icon={<TrendingUp />}
                   />
                 </Box>
               </Box>
 
               {/* Chart */}
-              <Box className="h-64 rounded-xl bg-gradient-to-b from-blue-50 to-white p-4">
+              <Box className="h-64 rounded-xl bg-slate-900/50 p-4 border border-white/5">
                 <Box className="flex h-full items-end justify-between gap-2">
                   {monthlyEarnings.map((earning) => {
                     const height = (earning.amount / maxEarning) * 100;
@@ -231,11 +231,11 @@ export default function AdminDashboardPage() {
                       <Box key={earning.month} className="flex-1 flex flex-col items-center gap-2 group">
                         <Box className="relative w-full flex items-end justify-center h-full">
                           <Box
-                            className="w-full rounded-t-lg bg-gradient-to-t from-blue-500 to-blue-400 transition-all group-hover:from-blue-600 group-hover:to-blue-500 shadow-md"
+                            className="w-full rounded-t-lg bg-gradient-to-t from-blue-500 to-blue-400 transition-all group-hover:from-blue-600 group-hover:to-blue-500 shadow-lg"
                             sx={{ height: `${height}%` }}
                           />
                         </Box>
-                        <Typography variant="caption" className="!font-medium !text-slate-600">
+                        <Typography variant="caption" className="!font-medium !text-white/70">
                           {earning.month}
                         </Typography>
                       </Box>
@@ -250,4 +250,3 @@ export default function AdminDashboardPage() {
     </Box>
   );
 }
-

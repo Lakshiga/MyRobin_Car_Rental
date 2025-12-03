@@ -79,10 +79,10 @@ export default function AdminBookingsPage() {
       {/* Header */}
       <Box className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <Box>
-          <Typography variant="h3" className="!font-bold !text-slate-900">
+          <Typography variant="h3" className="!font-bold !text-white">
             Bookings
           </Typography>
-          <Typography variant="body1" className="!text-slate-600 !mt-1">
+          <Typography variant="body1" className="!text-white/70 !mt-1">
             Manage all car rental bookings
           </Typography>
         </Box>
@@ -97,53 +97,78 @@ export default function AdminBookingsPage() {
       </Box>
 
       {/* Search */}
-      <Card className="!rounded-2xl !shadow-lg">
+      <Card className="!rounded-2xl !shadow-xl !bg-slate-800/50 !backdrop-blur-lg !border !border-white/10">
         <CardContent className="!p-4">
           <TextField
             fullWidth
-            placeholder="Search your dream car"
+            placeholder="Search bookings..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             InputProps={{
               startAdornment: (
                 <InputAdornment position="start">
-                  <Search className="!text-slate-400" />
+                  <Search className="!text-white/50" />
                 </InputAdornment>
               ),
             }}
-            className="!bg-slate-50"
+            sx={{
+              "& .MuiOutlinedInput-root": {
+                color: "white",
+                "& fieldset": {
+                  borderColor: "rgba(255, 255, 255, 0.1)",
+                },
+                "&:hover fieldset": {
+                  borderColor: "rgba(255, 255, 255, 0.2)",
+                },
+                "&.Mui-focused fieldset": {
+                  borderColor: "rgba(59, 130, 246, 0.5)",
+                },
+              },
+              "& .MuiInputBase-input::placeholder": {
+                color: "rgba(255, 255, 255, 0.4)",
+              },
+            }}
+            className="!bg-slate-900/50"
           />
         </CardContent>
       </Card>
 
       {/* Table */}
-      <Card className="!rounded-2xl !shadow-lg">
+      <Card className="!rounded-2xl !shadow-xl !bg-slate-800/50 !backdrop-blur-lg !border !border-white/10">
         <TableContainer>
           <Table>
             <TableHead>
-              <TableRow className="!bg-slate-50">
-                <TableCell className="!font-semibold">Car</TableCell>
-                <TableCell className="!font-semibold">Customer</TableCell>
-                <TableCell className="!font-semibold">Pickup Date</TableCell>
-                <TableCell className="!font-semibold" align="right">
+              <TableRow className="!bg-slate-900/50">
+                <TableCell className="!font-semibold !text-white/90">Car</TableCell>
+                <TableCell className="!font-semibold !text-white/90">Customer</TableCell>
+                <TableCell className="!font-semibold !text-white/90">Pickup Date</TableCell>
+                <TableCell className="!font-semibold !text-white/90" align="right">
                   Actions
                 </TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
               {filteredBookings.map((booking) => (
-                <TableRow key={booking.id} hover>
+                <TableRow 
+                  key={booking.id} 
+                  hover
+                  sx={{
+                    "&:hover": {
+                      backgroundColor: "rgba(255, 255, 255, 0.05)",
+                    },
+                  }}
+                >
                   <TableCell>
-                    <Typography variant="body2" className="!font-medium">
+                    <Typography variant="body2" className="!font-medium !text-white">
                       {booking.car}
                     </Typography>
                   </TableCell>
                   <TableCell>
-                    <Typography variant="body2">{booking.customer}</Typography>
+                    <Typography variant="body2" className="!text-white/70">{booking.customer}</Typography>
                   </TableCell>
                   <TableCell>
-                    <Typography variant="body2">{booking.pickupDate}</Typography>
-                    <Typography variant="caption" className="!text-slate-500">
+                    <Typography variant="body2" className="!text-white/70">{booking.pickupDate}</Typography>
+                    <Typography variant="caption" className="!text-white/50">
                       {booking.pickupTime}
                     </Typography>
                   </TableCell>
@@ -152,7 +177,7 @@ export default function AdminBookingsPage() {
                       size="small"
                       startIcon={<Visibility />}
                       onClick={() => handleView(booking.id)}
-                      className="!text-blue-600"
+                      className="!text-blue-400 hover:!bg-blue-500/20"
                     >
                       View
                     </Button>
@@ -166,4 +191,3 @@ export default function AdminBookingsPage() {
     </Box>
   );
 }
-

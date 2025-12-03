@@ -11,7 +11,6 @@ import {
   Typography,
   Button,
   IconButton,
-  Avatar,
   Drawer,
   List,
   ListItem,
@@ -56,11 +55,11 @@ export default function PublicLayout({
   };
 
   return (
-    <Box className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-slate-50">
+    <Box className="min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900">
       {/* App Bar */}
       <AppBar
         position="sticky"
-        className="!bg-white/95 !backdrop-blur-lg !shadow-lg !border-b !border-slate-200"
+        className="!bg-slate-900/95 !backdrop-blur-lg !shadow-lg !border-b !border-white/10"
         elevation={0}
       >
         <Toolbar className="!px-4 md:!px-8">
@@ -71,7 +70,7 @@ export default function PublicLayout({
             </Box>
             <Typography
               variant="h6"
-              className="!font-bold bg-gradient-to-r from-blue-600 to-blue-800 bg-clip-text text-transparent"
+              className="!font-bold !text-white"
             >
               MyRobin
             </Typography>
@@ -90,7 +89,7 @@ export default function PublicLayout({
                   className={`!rounded-xl !px-4 !py-2 !transition-all ${
                     isActive(link.href)
                       ? "!bg-gradient-to-r !from-blue-500 !to-blue-600 !text-white !shadow-md"
-                      : "!text-slate-700 hover:!bg-slate-100"
+                      : "!text-white/70 hover:!bg-white/10"
                   }`}
                 >
                   {link.label}
@@ -103,9 +102,9 @@ export default function PublicLayout({
 
           {/* Right Side Actions */}
           <Box className="hidden md:flex items-center gap-2">
-            <IconButton className="!text-slate-700">
+            <IconButton className="!text-white/70 hover:!bg-white/10">
               <Badge badgeContent={3} color="error">
-                <Notifications />
+                <Notifications className="!text-white" />
               </Badge>
             </IconButton>
             <Button
@@ -119,7 +118,7 @@ export default function PublicLayout({
 
           {/* Mobile Menu Button */}
           <IconButton
-            className="!text-slate-700 md:!hidden"
+            className="!text-white md:!hidden"
             onClick={handleDrawerToggle}
           >
             <Menu />
@@ -136,13 +135,16 @@ export default function PublicLayout({
           keepMounted: true,
         }}
         className="md:!hidden"
+        PaperProps={{
+          className: "!bg-slate-800 !w-64",
+        }}
       >
         <Box className="w-64 p-4">
           <Box className="flex items-center gap-2 mb-6">
             <Box className="flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br from-blue-500 to-blue-600 text-white font-bold">
               M
             </Box>
-            <Typography variant="h6" className="!font-bold">
+            <Typography variant="h6" className="!font-bold !text-white">
               MyRobin
             </Typography>
           </Box>
@@ -156,15 +158,15 @@ export default function PublicLayout({
                     href={link.href}
                     onClick={handleDrawerToggle}
                     className={`!rounded-xl !mb-1 ${
-                      isActive(link.href) ? "!bg-blue-50" : ""
+                      isActive(link.href) ? "!bg-blue-500/20" : ""
                     }`}
                   >
-                    <ListItemIcon className={isActive(link.href) ? "!text-blue-600 !min-w-0 !mr-3" : "!min-w-0 !mr-3"}>
+                    <ListItemIcon className={isActive(link.href) ? "!text-blue-400 !min-w-0 !mr-3" : "!text-white/70 !min-w-0 !mr-3"}>
                       <Icon />
                     </ListItemIcon>
                     <ListItemText
                       primary={link.label}
-                      className={isActive(link.href) ? "!text-blue-600 !font-semibold" : ""}
+                      className={isActive(link.href) ? "!text-blue-400 !font-semibold" : "!text-white/70"}
                     />
                   </ListItemButton>
                 </ListItem>
@@ -193,7 +195,7 @@ export default function PublicLayout({
       </main>
 
       {/* Footer */}
-      <Box className="bg-slate-900 text-white mt-20">
+      <Box className="bg-slate-900/50 border-t border-white/10 text-white mt-20">
         <Box className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-12">
           <Box className="grid grid-cols-1 md:grid-cols-3 gap-8">
             <Box>
@@ -201,17 +203,17 @@ export default function PublicLayout({
                 <Box className="flex h-10 w-10 items-center justify-center rounded-xl bg-blue-500 text-white font-bold">
                   M
                 </Box>
-                <Typography variant="h6" className="!font-bold">
+                <Typography variant="h6" className="!font-bold !text-white">
                   MyRobin
                 </Typography>
               </Box>
-              <Typography variant="body2" className="!text-slate-400">
+              <Typography variant="body2" className="!text-white/70">
                 Your trusted car rental partner. Premium vehicles, flexible plans, and exceptional
                 service.
               </Typography>
             </Box>
             <Box>
-              <Typography variant="h6" className="!font-semibold !mb-4">
+              <Typography variant="h6" className="!font-semibold !mb-4 !text-white">
                 Quick Links
               </Typography>
               <Box className="space-y-2">
@@ -219,7 +221,7 @@ export default function PublicLayout({
                   <Link
                     key={link.href}
                     href={link.href}
-                    className="block text-slate-400 hover:text-white transition text-sm"
+                    className="block text-white/70 hover:text-white transition text-sm"
                   >
                     {link.label}
                   </Link>
@@ -227,18 +229,18 @@ export default function PublicLayout({
               </Box>
             </Box>
             <Box>
-              <Typography variant="h6" className="!font-semibold !mb-4">
+              <Typography variant="h6" className="!font-semibold !mb-4 !text-white">
                 Contact
               </Typography>
-              <Box className="space-y-2 text-sm text-slate-400">
+              <Box className="space-y-2 text-sm text-white/70">
                 <Typography>Email: support@myrobin.com</Typography>
                 <Typography>Phone: +1 (555) 123-4567</Typography>
                 <Typography>24/7 Customer Support</Typography>
               </Box>
             </Box>
           </Box>
-          <Box className="border-t border-slate-800 mt-8 pt-8 text-center">
-            <Typography variant="body2" className="!text-slate-400">
+          <Box className="border-t border-white/10 mt-8 pt-8 text-center">
+            <Typography variant="body2" className="!text-white/70">
               &copy; 2025 MyRobin. All rights reserved.
             </Typography>
           </Box>
