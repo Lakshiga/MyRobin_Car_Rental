@@ -2,32 +2,16 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import Link from "next/link";
-import {
-  Box,
-  Card,
-  CardContent,
-  TextField,
-  Button,
-  Typography,
-  Alert,
-  Checkbox,
-  FormControlLabel,
-} from "@mui/material";
-import { Login, Visibility, VisibilityOff } from "@mui/icons-material";
 import { useAuth } from "@/contexts/AuthContext";
+import { Login } from "./Login";
 
 export default function SignInPage() {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState("");
   const [isLoading, setIsLoading] = useState(false);
-  const { login, user } = useAuth();
+  const { login } = useAuth();
   const router = useRouter();
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
+  const handleSignIn = async (email: string, password: string) => {
     setError("");
     setIsLoading(true);
 
@@ -51,149 +35,47 @@ export default function SignInPage() {
     }
   };
 
+  const handleSignUp = async (name: string, email: string, password: string, confirmPassword: string) => {
+    setError("");
+    
+    if (password !== confirmPassword) {
+      setError("Passwords do not match");
+      return;
+    }
+
+    if (password.length < 6) {
+      setError("Password must be at least 6 characters");
+      return;
+    }
+
+    setIsLoading(true);
+
+    try {
+      // For signup, we use the login method which creates a user
+      const success = await login(email, password);
+      if (success) {
+        // Update the user name in localStorage
+        const currentUser = JSON.parse(localStorage.getItem("user") || "{}");
+        currentUser.name = name;
+        localStorage.setItem("user", JSON.stringify(currentUser));
+        
+        router.push("/");
+      } else {
+        setError("Registration failed. Please try again.");
+      }
+    } catch (err) {
+      setError("An error occurred. Please try again.");
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
   return (
-    <Box className="min-h-screen flex items-center justify-center bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 py-12 px-4">
-      <Card className="max-w-md w-full !rounded-3xl !shadow-2xl !bg-slate-800/50 !backdrop-blur-lg !border !border-white/10">
-        <CardContent className="!p-8">
-          {/* Header */}
-          <Box className="text-center mb-8">
-            <Box className="flex justify-center mb-4">
-              <Box className="flex h-16 w-16 items-center justify-center rounded-2xl bg-gradient-to-br from-blue-500 to-blue-600 text-white font-bold text-2xl shadow-lg">
-                M
-              </Box>
-            </Box>
-            <Typography variant="h4" className="!font-bold !text-white">
-              Welcome Back
-            </Typography>
-            <Typography variant="body2" className="!text-white/70 !mt-2">
-              Sign in to your account to continue
-            </Typography>
-          </Box>
-
-          {/* Form */}
-          <Box component="form" onSubmit={handleSubmit} className="space-y-4">
-            {error && (
-              <Alert severity="error" className="!rounded-xl !bg-rose-500/20 !text-rose-400 !border !border-rose-500/30">
-                {error}
-              </Alert>
-            )}
-
-            <TextField
-              fullWidth
-              label="Email Address"
-              type="email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              required
-              className="!rounded-xl"
-              variant="outlined"
-              sx={{
-                "& .MuiOutlinedInput-root": {
-                  color: "white",
-                  "& fieldset": {
-                    borderColor: "rgba(255, 255, 255, 0.1)",
-                  },
-                  "&:hover fieldset": {
-                    borderColor: "rgba(255, 255, 255, 0.2)",
-                  },
-                  "&.Mui-focused fieldset": {
-                    borderColor: "rgba(59, 130, 246, 0.5)",
-                  },
-                },
-                "& .MuiInputLabel-root": {
-                  color: "rgba(255, 255, 255, 0.7)",
-                },
-                "& .MuiInputBase-input::placeholder": {
-                  color: "rgba(255, 255, 255, 0.4)",
-                },
-              }}
-            />
-
-            <TextField
-              fullWidth
-              label="Password"
-              type={showPassword ? "text" : "password"}
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              required
-              className="!rounded-xl"
-              variant="outlined"
-              sx={{
-                "& .MuiOutlinedInput-root": {
-                  color: "white",
-                  "& fieldset": {
-                    borderColor: "rgba(255, 255, 255, 0.1)",
-                  },
-                  "&:hover fieldset": {
-                    borderColor: "rgba(255, 255, 255, 0.2)",
-                  },
-                  "&.Mui-focused fieldset": {
-                    borderColor: "rgba(59, 130, 246, 0.5)",
-                  },
-                },
-                "& .MuiInputLabel-root": {
-                  color: "rgba(255, 255, 255, 0.7)",
-                },
-              }}
-              InputProps={{
-                endAdornment: (
-                  <Button
-                    onClick={() => setShowPassword(!showPassword)}
-                    className="!min-w-0 !p-1 !text-white/70"
-                  >
-                    {showPassword ? <VisibilityOff /> : <Visibility />}
-                  </Button>
-                ),
-              }}
-            />
-
-            <Box className="flex items-center justify-between">
-              <FormControlLabel
-                control={<Checkbox sx={{ color: "rgba(255, 255, 255, 0.7)" }} />}
-                label={<Typography className="!text-white/70 !text-sm">Remember me</Typography>}
-              />
-              <Link href="#" className="text-sm text-blue-400 hover:text-blue-300 font-medium">
-                Forgot password?
-              </Link>
-            </Box>
-
-            <Button
-              type="submit"
-              fullWidth
-              variant="contained"
-              size="large"
-              disabled={isLoading}
-              startIcon={<Login />}
-              className="!bg-gradient-to-r !from-blue-500 !to-blue-600 hover:!from-blue-600 hover:!to-blue-700 !shadow-lg !py-3 !rounded-xl"
-            >
-              {isLoading ? "Signing in..." : "Sign In"}
-            </Button>
-          </Box>
-
-          {/* Admin Credentials Hint */}
-          <Box className="mt-6 p-4 bg-blue-500/20 rounded-xl border border-blue-500/30">
-            <Typography variant="caption" className="!font-semibold !text-blue-400 !mb-2 !block">
-              Demo Admin Credentials:
-            </Typography>
-            <Typography variant="caption" className="!text-blue-300 !block">
-              Email: admin@myrobin.com
-            </Typography>
-            <Typography variant="caption" className="!text-blue-300 !block">
-              Password: admin123
-            </Typography>
-          </Box>
-
-          {/* Sign Up Link */}
-          <Box className="mt-6 text-center">
-            <Typography variant="body2" className="!text-white/70">
-              Don't have an account?{" "}
-              <Link href="/auth/signup" className="!font-semibold !text-blue-400 hover:!text-blue-300">
-                Sign up
-              </Link>
-            </Typography>
-          </Box>
-        </CardContent>
-      </Card>
-    </Box>
+    <Login
+      onSignIn={handleSignIn}
+      onSignUp={handleSignUp}
+      error={error}
+      isLoading={isLoading}
+    />
   );
 }

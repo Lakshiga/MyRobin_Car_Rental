@@ -1,0 +1,370 @@
+:root {
+  --color-primary: #3b82f6;
+  --color-dark: #2563eb;
+  --color-muted: hsl(226, 12%, 51%);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+p a {
+  color: var(--color-primary);
+}
+
+.login {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  background: linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #0f172a 100%);
+  padding: 40px 24px;
+  box-sizing: border-box;
+}
+
+.card {
+  display: flex;
+  align-content: stretch;
+  width: 1000px;
+  height: 620px;
+  background: #1e293b;
+  box-shadow: 0 20px 80px rgba(0, 0, 0, 0.4);
+  border-radius: 6px;
+  overflow: hidden;
+  position: relative;
+}
+
+.card-nav {
+  position: relative;
+  align-self: stretch;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  width: 200px;
+  height: 620px;
+}
+
+.card-nav .active-bar {
+  position: absolute;
+  top: 33.33%;
+  left: 0;
+  width: 5px;
+  height: 33.33%;
+  border-radius: 0 6px 6px 0;
+  background: var(--color-dark);
+  transition: 0.4s ease-out;
+  z-index: 1;
+}
+
+.card-nav li {
+  flex: 1 1 auto;
+  display: grid;
+  place-items: center;
+}
+
+.card-nav li button.active {
+  color: var(--color-primary);
+}
+
+.card-nav button {
+  background: transparent;
+  border: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  font-size: 14px;
+  transition: 0.3s;
+  color: rgba(255, 255, 255, 0.6);
+  cursor: pointer;
+}
+
+.card-nav button:not(.active):hover {
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.card-nav button:not(.active):hover i {
+  scale: 1.1;
+}
+
+.card-nav button i,
+.card-nav button svg {
+  font-size: 24px;
+  transition: 0.3s;
+  width: 24px;
+  height: 24px;
+}
+
+.card-form {
+  position: relative;
+  overflow: hidden;
+  padding: 0;
+  width: 500px;
+  height: 620px;
+  display: flex;
+  flex-direction: column;
+  flex-shrink: 0;
+  will-change: contents;
+}
+
+.forms {
+  position: absolute;
+  height: 1240px;
+  left: 0;
+  top: 0;
+  transition: top 0.5s ease-in-out;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+.forms form {
+  overflow: hidden;
+  padding: 24px;
+  height: 620px;
+  min-height: 620px;
+  max-height: 620px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  box-sizing: border-box;
+  flex-shrink: 0;
+}
+
+.forms form::-webkit-scrollbar {
+  width: 6px;
+}
+
+.forms form::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.forms form::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 3px;
+}
+
+.forms form::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.3);
+}
+
+.card-hero {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  margin: 0;
+  flex: 0 0 300px;
+  width: 300px;
+  height: 620px;
+  overflow: hidden;
+  border-radius: 0;
+  background: var(--color-dark);
+  align-self: stretch;
+}
+
+.card-hero-inner {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  transition: 0.5s ease-in-out;
+}
+
+.card-hero-content {
+  height: 620px;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 40px 24px 24px 24px;
+  box-sizing: border-box;
+}
+
+.card-hero-content h2,
+.card-hero-content h3 {
+  text-align: left;
+  font-weight: 400;
+  margin: 0;
+  padding-left: 24px;
+}
+
+.card-hero h2 {
+  color: #f9f9f9;
+  margin: 0 0 2px;
+  font-size: 24px;
+}
+
+.card-hero h3 {
+  color: #f9f9f9;
+  opacity: 0.75;
+  font-size: 13px;
+  margin: 0 0 32px;
+}
+
+.card-hero img {
+  width: 100%;
+}
+
+.form-group {
+  margin-bottom: 16px;
+}
+
+.form-group label {
+  display: block;
+  color: rgba(255, 255, 255, 0.7);
+  font-size: 14px;
+  margin-bottom: 8px;
+}
+
+.form-group input {
+  width: 100%;
+  padding: 12px 16px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 8px;
+  color: #fff;
+  font-size: 14px;
+  transition: 0.3s;
+}
+
+.form-group input:focus {
+  outline: none;
+  border-color: var(--color-primary);
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.form-group input::placeholder {
+  color: rgba(255, 255, 255, 0.4);
+}
+
+.form-header {
+  margin-bottom: 20px;
+}
+
+.form-header h2 {
+  color: #fff;
+  font-size: 24px;
+  font-weight: 600;
+  margin: 0 0 8px;
+}
+
+.form-header p {
+  color: rgba(255, 255, 255, 0.7);
+  font-size: 14px;
+  margin: 0;
+}
+
+.form-header p a {
+  color: var(--color-primary);
+  text-decoration: none;
+  font-weight: 500;
+}
+
+.form-header p a:hover {
+  text-decoration: underline;
+}
+
+.submit-button {
+  width: 100%;
+  padding: 12px;
+  background: var(--color-primary);
+  border: 0;
+  border-radius: 8px;
+  color: #fff;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: 0.3s;
+  margin-top: 12px;
+}
+
+.submit-button:hover {
+  background: var(--color-dark);
+}
+
+.submit-button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.form-footer {
+  margin-top: 12px;
+  font-size: 11px;
+  color: rgba(255, 255, 255, 0.5);
+  text-align: center;
+  line-height: 1.4;
+}
+
+.input-icon {
+  position: relative;
+}
+
+.input-icon input {
+  padding-left: 44px;
+}
+
+.input-icon .icon {
+  position: absolute;
+  left: 16px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: rgba(255, 255, 255, 0.5);
+  font-size: 18px;
+  width: 18px;
+  height: 18px;
+  pointer-events: none;
+}
+
+.error-message {
+  background: rgba(239, 68, 68, 0.2);
+  border: 1px solid rgba(239, 68, 68, 0.3);
+  color: #fca5a5;
+  padding: 12px;
+  border-radius: 8px;
+  font-size: 14px;
+  margin-bottom: 16px;
+}
+
+@media (max-width: 768px) {
+  .card {
+    flex-direction: column;
+    width: 100%;
+    max-width: 400px;
+    height: auto;
+    min-height: 500px;
+  }
+
+  .card-nav {
+    width: 100%;
+    flex-direction: row;
+    height: 80px;
+  }
+
+  .card-nav .active-bar {
+    top: 0;
+    left: 33.33%;
+    width: 33.33%;
+    height: 5px;
+  }
+
+  .card-form {
+    width: 100%;
+    padding: 20px;
+  }
+
+  .card-hero {
+    display: none;
+  }
+}
+
