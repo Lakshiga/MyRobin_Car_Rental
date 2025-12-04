@@ -34,7 +34,7 @@ const CardNav = ({ view, toggleView }: CardNavProps) => {
   ];
 
   return (
-    <ul className="card-nav">
+    <ul className="card-nav" data-view={view}>
       <li>
         <div style={{ display: "flex", alignItems: "center", justifyContent: "center", padding: "16px" }}>
           <div style={{ 
@@ -55,7 +55,10 @@ const CardNav = ({ view, toggleView }: CardNavProps) => {
       </li>
       <span
         className="active-bar"
-        style={{ top: view === "signin" ? "33.33%" : "66.66%" }}
+        style={{ 
+          top: view === "signin" ? "calc(100% / 3)" : "calc(100% * 2 / 3)",
+          left: "0%"
+        }}
       ></span>
       {navButtons.map((btn) => (
         <li key={btn.name}>
@@ -135,6 +138,7 @@ const CardForms = ({ view, onSignIn, onSignUp, error, isLoading, toggleView }: C
     <div className="card-form">
       <div
         className="forms"
+        data-view={view}
         style={{ 
           top: view === "signin" ? "0" : "-620px"
         }}
