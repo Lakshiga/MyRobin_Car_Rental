@@ -2,16 +2,40 @@
 
 import { createContext, useContext, useState, useEffect, type ReactNode } from "react";
 import { useRouter } from "next/navigation";
+import { useMutation, useLazyQuery } from "@apollo/client";
+import { gql } from "@apollo/client";
 
-const ADMIN_CREDENTIALS = {
-  email: "admin@myrobin.com",
-  password: "admin123",
-};
+const LOGIN_MUTATION = gql`
+  mutation Login($input: LoginInput!) {
+    login(input: $input) {
+      token
+      user {
+        id
+        email
+        name
+        role
+      }
+    }
+  }
+`;
+
+const ME_QUERY = gql`
+  query Me {
+    me {
+      id
+      email
+      name
+      role
+    }
+  }
+`;
 
 interface User {
+  id: string;
   email: string;
   name: string;
-  role: "admin" | "user";
+  role: "ADMIN" | "USER";
+  imageUrl?: string;
 }
 
 interface AuthContextType {
@@ -29,41 +53,60 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [isLoading, setIsLoading] = useState(true);
   const router = useRouter();
 
+  const [loginMutation] = useMutation(LOGIN_MUTATION);
+  const [loadMe] = useLazyQuery(ME_QUERY);
+
   useEffect(() => {
-    const storedUser = localStorage.getItem("user");
-    if (storedUser) {
-      setUser(JSON.parse(storedUser));
+    const token = localStorage.getItem("token");
+    if (token) {
+      loadMe({
+        context: {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        },
+        onCompleted: (data) => {
+          if (data?.me) {
+            setUser(data.me);
+          } else {
+            localStorage.removeItem("token");
+          }
+          setIsLoading(false);
+        },
+        onError: () => {
+          localStorage.removeItem("token");
+          setIsLoading(false);
+        },
+      });
+    } else {
+      setIsLoading(false);
     }
-    setIsLoading(false);
-  }, []);
+  }, [loadMe]);
 
   const login = async (email: string, password: string): Promise<boolean> => {
-    await new Promise((resolve) => setTimeout(resolve, 500));
+    try {
+      const result = await loginMutation({
+        variables: { 
+          input: { email, password }
+        },
+      });
 
-    if (email === ADMIN_CREDENTIALS.email && password === ADMIN_CREDENTIALS.password) {
-      const adminUser: User = {
-        email: ADMIN_CREDENTIALS.email,
-        name: "Admin User",
-        role: "admin",
-      };
-      setUser(adminUser);
-      localStorage.setItem("user", JSON.stringify(adminUser));
-      return true;
+      if (result.data?.login) {
+        const { token, user } = result.data.login;
+        localStorage.setItem("token", token);
+        setUser(user);
+        return true;
+      }
+      return false;
+    } catch (error) {
+      console.error("Login error:", error);
+      return false;
     }
-
-    const regularUser: User = {
-      email,
-      name: email.split("@")[0],
-      role: "user",
-    };
-    setUser(regularUser);
-    localStorage.setItem("user", JSON.stringify(regularUser));
-    return true;
   };
 
   const logout = () => {
     setUser(null);
-    localStorage.removeItem("user");
+    localStorage.removeItem("token");
     router.push("/auth/signin");
   };
 
