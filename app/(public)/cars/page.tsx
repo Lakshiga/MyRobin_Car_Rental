@@ -1,7 +1,11 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
+import { useQuery } from "@apollo/client";
+import { useAuth } from "@/contexts/AuthContext";
+import { GET_CARS, GET_AVAILABLE_CARS } from "@/lib/graphql/carQueries";
+import { AddCarForm } from "@/components/AddCarForm";
 import {
   Button,
   Card,
@@ -13,6 +17,11 @@ import {
   Grid,
   IconButton,
   InputAdornment,
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogActions,
+  DatePicker,
 } from "@mui/material";
 import {
   Search,
@@ -24,6 +33,7 @@ import {
   ShoppingCart,
   Favorite,
   FavoriteBorder,
+  Add,
 } from "@mui/icons-material";
 
 const cars = [
@@ -93,15 +103,34 @@ const categories = ["All", "Electric", "Sports", "Supercar", "Luxury", "Performa
 
 export default function CarsPage() {
   const router = useRouter();
+  const { user, isAuthenticated } = useAuth();
+  const [searchTerm, setSearchTerm] = useState("");
   const [selectedCategory, setSelectedCategory] = useState("All");
-  const [searchQuery, setSearchQuery] = useState("");
+  const [showFilters, setShowFilters] = useState(false);
   const [favorites, setFavorites] = useState<number[]>([]);
+  const [addCarDialog, setAddCarDialog] = useState(false);
 
-  const filteredCars = cars.filter((car) => {
-    const matchesCategory = selectedCategory === "All" || car.category === selectedCategory;
-    const matchesSearch = car.name.toLowerCase().includes(searchQuery.toLowerCase());
-    return matchesCategory && matchesSearch;
+  // GraphQL query for cars
+  const { data: carsData, loading, error, refetch } = useQuery(GET_CARS);
+  const cars = carsData?.cars || [];
+
+  const filteredCars = cars.filter((car: any) => {
+    const matchesSearch = car.make.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                         car.model.toLowerCase().includes(searchTerm.toLowerCase());
+    const matchesCategory = selectedCategory === "All" || car.color === selectedCategory;
+    return matchesSearch && matchesCategory;
   });
+
+  const handleBookCar = (car: any) => {
+    setSelectedCar(car);
+    setBookingDialog(true);
+  };
+
+  const handleBookingSubmit = () => {
+    // TODO: Implement booking mutation
+    console.log('Booking car:', selectedCar, 'from', startDate, 'to', endDate);
+    setBookingDialog(false);
+  };
 
   const handleCategoryClick = (category: string) => {
     setSelectedCategory(category);
@@ -126,21 +155,34 @@ export default function CarsPage() {
   return (
     <Box className="space-y-4 md:space-y-8 w-full">
       {/* Header */}
-      <Box className="space-y-2 md:space-y-4 w-full">
-        <Typography 
-          variant="h3" 
-          className="!font-bold !text-white !text-2xl sm:!text-3xl md:!text-4xl"
-          sx={{ fontSize: "clamp(1.5rem, 4vw, 2.25rem)" }}
-        >
-          Available Cars
-        </Typography>
-        <Typography 
-          variant="body1" 
-          className="!text-white/70 !text-sm md:!text-base"
-          sx={{ fontSize: "clamp(0.875rem, 2vw, 1rem)" }}
-        >
-          Filter by category, search by name, or browse our entire fleet.
-        </Typography>
+      <Box className="space-y-2 md:space-y-4 w-full flex justify-between items-start">
+        <Box className="space-y-2 md:space-y-4">
+          <Typography 
+            variant="h3" 
+            className="!font-bold !text-white !text-2xl sm:!text-3xl md:!text-4xl"
+            sx={{ fontSize: "clamp(1.5rem, 4vw, 2.25rem)" }}
+          >
+            Available Cars
+          </Typography>
+          <Typography 
+            variant="body1" 
+            className="!text-white/70 !text-sm md:!text-base"
+            sx={{ fontSize: "clamp(0.875rem, 2vw, 1rem)" }}
+          >
+            Filter by category, search by name, or browse our entire fleet.
+          </Typography>
+        </Box>
+        
+        {isAuthenticated && user?.role === "ADMIN" && (
+          <Button
+            variant="contained"
+            startIcon={<Add />}
+            onClick={() => setAddCarDialog(true)}
+            className="!bg-blue-500 hover:!bg-blue-600 !rounded-xl"
+          >
+            Add Car
+          </Button>
+        )}
       </Box>
 
       {/* Search Bar */}
@@ -149,8 +191,8 @@ export default function CarsPage() {
           <TextField
             fullWidth
             placeholder="Search your dream car..."
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
             InputProps={{
               startAdornment: (
                 <InputAdornment position="start">
@@ -217,8 +259,16 @@ export default function CarsPage() {
             <Card className="!rounded-2xl !shadow-xl hover:!shadow-2xl !transition-all !transform hover:!-translate-y-1 !h-full !bg-slate-800/50 !backdrop-blur-lg !border !border-white/10">
               {/* Car Image */}
               <Box className="relative">
-                <Box className="flex h-48 items-center justify-center bg-gradient-to-br from-slate-700 to-slate-800 text-7xl">
-                  {car.image}
+                <Box className="flex h-48 items-center justify-center bg-gradient-to-br from-slate-700 to-slate-800">
+                  {car.imageUrl ? (
+                    <img 
+                      src={`http://localhost:4000${car.imageUrl}`} 
+                      alt={`${car.make} ${car.model}`}
+                      className="w-full h-full object-cover"
+                    />
+                  ) : (
+                    <div className="text-7xl">🚗</div>
+                  )}
                 </Box>
                 <IconButton
                   size="small"
@@ -232,7 +282,7 @@ export default function CarsPage() {
                   )}
                 </IconButton>
                 <Chip
-                  label={car.category}
+                  label={car.color}
                   size="small"
                   className="!absolute !top-3 !left-3 !bg-slate-800/90 !font-semibold !text-white"
                 />
@@ -242,7 +292,7 @@ export default function CarsPage() {
               <CardContent className="!p-4 space-y-3">
                 <Box>
                   <Typography variant="h6" className="!font-bold !text-white !mb-1">
-                    {car.name}
+                    {car.make} {car.model}
                   </Typography>
                 </Box>
 
@@ -250,15 +300,15 @@ export default function CarsPage() {
                   <Box className="flex items-center gap-1">
                     <Star className="!text-amber-400 !text-lg" />
                     <Typography variant="body2" className="!font-medium !text-white/70">
-                      {car.rating}
+                      {car.year}
                     </Typography>
                   </Box>
                   <Chip
-                    icon={car.status === "Available" ? <CheckCircle /> : <Cancel />}
-                    label={car.status}
+                    icon={car.available ? <CheckCircle /> : <Cancel />}
+                    label={car.available ? "Available" : "Booked"}
                     size="small"
                     className={
-                      car.status === "Available"
+                      car.available
                         ? "!bg-emerald-500/20 !text-emerald-400 !border !border-emerald-500/30"
                         : "!bg-rose-500/20 !text-rose-400 !border !border-rose-500/30"
                     }
@@ -268,24 +318,12 @@ export default function CarsPage() {
                 <Box className="space-y-2">
                   <Box className="flex items-center justify-between">
                     <Typography variant="h5" className="!font-bold !text-blue-400">
-                      ${car.price}
+                      ${car.pricePerDay}
                     </Typography>
                     <Typography variant="body2" className="!text-white/50">
                       /day
                     </Typography>
                   </Box>
-                </Box>
-
-                {/* Features */}
-                <Box className="flex flex-wrap gap-2">
-                  {car.features.slice(0, 2).map((feature, idx) => (
-                    <Chip
-                      key={idx}
-                      label={feature}
-                      size="small"
-                      className="!bg-slate-700/50 !text-white/70"
-                    />
-                  ))}
                 </Box>
 
                 {/* Action Buttons */}
@@ -299,11 +337,11 @@ export default function CarsPage() {
                   >
                     View
                   </Button>
-                  {car.status === "Available" && (
+                  {car.available && (
                     <Button
                       variant="contained"
                       startIcon={<ShoppingCart />}
-                      onClick={() => handleBookNow(car.id, car.name)}
+                      onClick={() => handleBookNow(car.id, `${car.make} ${car.model}`)}
                       className="!bg-emerald-500 hover:!bg-emerald-600 !rounded-xl"
                     >
                       Book
@@ -326,7 +364,7 @@ export default function CarsPage() {
               variant="outlined"
               onClick={() => {
                 setSelectedCategory("All");
-                setSearchQuery("");
+                setSearchTerm("");
               }}
               className="!text-blue-400 !border-blue-500/50 hover:!bg-blue-500/20"
             >
@@ -335,6 +373,13 @@ export default function CarsPage() {
           </CardContent>
         </Card>
       )}
+
+      {/* Add Car Dialog */}
+      <AddCarForm
+        open={addCarDialog}
+        onClose={() => setAddCarDialog(false)}
+        onCarAdded={() => refetch()}
+      />
     </Box>
   );
 }

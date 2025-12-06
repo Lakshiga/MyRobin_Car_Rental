@@ -4,6 +4,8 @@ import type { ReactNode } from "react";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { useState } from "react";
+import { useAuth } from "@/contexts/AuthContext";
+import { UserAvatar } from "@/components/UserAvatar";
 import {
   AppBar,
   Toolbar,
@@ -43,6 +45,7 @@ export default function PublicLayout({
   const pathname = usePathname();
   const router = useRouter();
   const [mobileOpen, setMobileOpen] = useState(false);
+  const { user, isAuthenticated } = useAuth();
 
   const isActive = (href: string) => pathname === href;
 
@@ -107,13 +110,17 @@ export default function PublicLayout({
                 <Notifications className="!text-white" />
               </Badge>
             </IconButton>
-            <Button
-              variant="contained"
-              onClick={handleSignIn}
-              className="!bg-gradient-to-r !from-blue-500 !to-blue-600 hover:!from-blue-600 hover:!to-blue-700 !shadow-lg !rounded-xl"
-            >
-              Sign In
-            </Button>
+            {isAuthenticated ? (
+              <UserAvatar />
+            ) : (
+              <Button
+                variant="contained"
+                onClick={handleSignIn}
+                className="!bg-gradient-to-r !from-blue-500 !to-blue-600 hover:!from-blue-600 hover:!to-blue-700 !shadow-lg !rounded-xl"
+              >
+                Sign In
+              </Button>
+            )}
           </Box>
 
         </Toolbar>
@@ -239,14 +246,18 @@ export default function PublicLayout({
               <Notifications className="!text-white !text-xl" />
             </Badge>
           </IconButton>
-          <Button
-            variant="contained"
-            onClick={handleSignIn}
-            size="small"
-            className="!bg-gradient-to-r !from-blue-500 !to-blue-600 hover:!from-blue-600 hover:!to-blue-700 !shadow-lg !rounded-lg !text-xs !px-3 !py-1"
-          >
-            Sign In
-          </Button>
+          {isAuthenticated ? (
+            <UserAvatar />
+          ) : (
+            <Button
+              variant="contained"
+              onClick={handleSignIn}
+              size="small"
+              className="!bg-gradient-to-r !from-blue-500 !to-blue-600 hover:!from-blue-600 hover:!to-blue-700 !shadow-lg !rounded-lg !text-xs !px-3 !py-1"
+            >
+              Sign In
+            </Button>
+          )}
         </Box>
       </Box>
 

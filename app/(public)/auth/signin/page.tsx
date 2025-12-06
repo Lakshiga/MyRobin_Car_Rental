@@ -20,7 +20,7 @@ export default function SignInPage() {
       if (success) {
         // Check user role after login
         const currentUser = JSON.parse(localStorage.getItem("user") || "{}");
-        if (currentUser?.role === "admin") {
+        if (currentUser?.role === "ADMIN") {
           router.push("/admin");
         } else {
           router.push("/");
