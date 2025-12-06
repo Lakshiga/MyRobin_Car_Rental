@@ -21,7 +21,6 @@ import {
   DialogTitle,
   DialogContent,
   DialogActions,
-  DatePicker,
 } from "@mui/material";
 import {
   Search,
@@ -120,17 +119,6 @@ export default function CarsPage() {
     const matchesCategory = selectedCategory === "All" || car.color === selectedCategory;
     return matchesSearch && matchesCategory;
   });
-
-  const handleBookCar = (car: any) => {
-    setSelectedCar(car);
-    setBookingDialog(true);
-  };
-
-  const handleBookingSubmit = () => {
-    // TODO: Implement booking mutation
-    console.log('Booking car:', selectedCar, 'from', startDate, 'to', endDate);
-    setBookingDialog(false);
-  };
 
   const handleCategoryClick = (category: string) => {
     setSelectedCategory(category);
@@ -254,7 +242,7 @@ export default function CarsPage() {
 
       {/* Cars Grid */}
       <Grid container spacing={{ xs: 2, sm: 2, md: 3 }} sx={{ width: "100%" }}>
-        {filteredCars.map((car) => (
+        {filteredCars.map((car: any) => (
           <Grid item xs={12} sm={6} md={6} lg={4} key={car.id} sx={{ width: { xs: "100%", sm: "50%", md: "50%", lg: "33.33%" } }}>
             <Card className="!rounded-2xl !shadow-xl hover:!shadow-2xl !transition-all !transform hover:!-translate-y-1 !h-full !bg-slate-800/50 !backdrop-blur-lg !border !border-white/10">
               {/* Car Image */}
@@ -262,7 +250,7 @@ export default function CarsPage() {
                 <Box className="flex h-48 items-center justify-center bg-gradient-to-br from-slate-700 to-slate-800">
                   {car.imageUrl ? (
                     <img 
-                      src={`http://localhost:4000${car.imageUrl}`} 
+                      src={`http://localhost:4001${car.imageUrl}`} 
                       alt={`${car.make} ${car.model}`}
                       className="w-full h-full object-cover"
                     />

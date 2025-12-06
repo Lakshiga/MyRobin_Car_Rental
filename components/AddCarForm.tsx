@@ -96,7 +96,7 @@ export function AddCarForm({ open, onClose, onCarAdded }: AddCarFormProps) {
         return;
       }
 
-      const response = await fetch('http://localhost:4000/upload', {
+      const response = await fetch('http://localhost:4001/upload', {
         method: 'POST',
         headers: {
           'Authorization': `Bearer ${token}`, // Add auth header
@@ -196,7 +196,13 @@ export function AddCarForm({ open, onClose, onCarAdded }: AddCarFormProps) {
 
   return (
     <>
-      <Dialog open={open} onClose={onClose} maxWidth="md" fullWidth>
+      <Dialog 
+        open={open} 
+        onClose={onClose} 
+        maxWidth="md" 
+        fullWidth
+        aria-hidden={false}
+      >
         <DialogTitle className="!bg-gradient-to-r !from-blue-500 !to-blue-600 !text-white">
           <Box className="flex justify-between items-center">
             <Typography variant="h5" className="!font-bold">
@@ -225,7 +231,7 @@ export function AddCarForm({ open, onClose, onCarAdded }: AddCarFormProps) {
                     {imageUrl ? (
                       <Box className="relative">
                         <img
-                          src={`http://localhost:4000${imageUrl}`}
+                          src={`http://localhost:4001${imageUrl}`}
                           alt="Car preview"
                           className="w-full h-48 object-cover rounded-lg"
                         />

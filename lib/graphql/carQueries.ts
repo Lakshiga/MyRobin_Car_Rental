@@ -63,7 +63,7 @@ export const GET_AVAILABLE_CARS = gql`
 `;
 
 export const GET_CAR = gql`
-  query GetCar($id: Int!) {
+  query GetCar($id: ID!) {
     car(id: $id) {
       id
       make
@@ -117,7 +117,7 @@ export const CREATE_CAR = gql`
 `;
 
 export const UPDATE_CAR = gql`
-  mutation UpdateCar($id: Int!, $input: UpdateCarInput!) {
+  mutation UpdateCar($id: ID!, $input: UpdateCarInput!) {
     updateCar(id: $id, input: $input) {
       id
       make
@@ -140,7 +140,7 @@ export const UPDATE_CAR = gql`
 `;
 
 export const DELETE_CAR = gql`
-  mutation DeleteCar($id: Int!) {
+  mutation DeleteCar($id: ID!) {
     deleteCar(id: $id)
   }
 `;
@@ -217,13 +217,22 @@ export const GET_USER_ACTIVE_RENTALS = gql`
 `;
 
 export const CANCEL_RENTAL = gql`
-  mutation CancelRental($id: Int!) {
+  mutation CancelRental($id: ID!) {
     cancelRental(id: $id)
   }
 `;
 
+export const GET_CAR_UNAVAILABLE_DATES = gql`
+  query GetCarUnavailableDates($carId: ID!) {
+    carUnavailableDates(carId: $carId) {
+      startDate
+      endDate
+    }
+  }
+`;
+
 export const ADD_CAR_IMAGE = gql`
-  mutation AddCarImage($carId: Int!, $imageUrl: String!, $isPrimary: Boolean) {
+  mutation AddCarImage($carId: ID!, $imageUrl: String!, $isPrimary: Boolean) {
     addCarImage(carId: $carId, imageUrl: $imageUrl, isPrimary: $isPrimary) {
       id
       carId
@@ -236,13 +245,13 @@ export const ADD_CAR_IMAGE = gql`
 `;
 
 export const DELETE_CAR_IMAGE = gql`
-  mutation DeleteCarImage($imageId: Int!) {
+  mutation DeleteCarImage($imageId: ID!) {
     deleteCarImage(imageId: $imageId)
   }
 `;
 
 export const SET_PRIMARY_IMAGE = gql`
-  mutation SetPrimaryImage($imageId: Int!) {
+  mutation SetPrimaryImage($imageId: ID!) {
     setPrimaryImage(imageId: $imageId) {
       id
       carId

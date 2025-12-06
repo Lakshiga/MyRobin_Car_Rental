@@ -78,7 +78,7 @@ export default function CarDetailsPage() {
       const formData = new FormData();
       formData.append("image", file);
 
-      const uploadResponse = await fetch("http://localhost:4000/upload", {
+      const uploadResponse = await fetch("http://localhost:4001/upload", {
         method: "POST",
         headers: {
           Authorization: `Bearer ${token}`,
@@ -198,7 +198,7 @@ export default function CarDetailsPage() {
                 {primaryImage && (
                   <Box className="relative w-full h-96 mb-4 rounded-xl overflow-hidden bg-slate-700">
                     <img
-                      src={`http://localhost:4000${primaryImage.imageUrl}`}
+                      src={`http://localhost:4001${primaryImage.imageUrl}`}
                       alt={`${car.make} ${car.model}`}
                       className="w-full h-full object-cover"
                     />
@@ -210,7 +210,7 @@ export default function CarDetailsPage() {
                     {allImages.map((image: any) => (
                       <ImageListItem key={image.id} className="!cursor-pointer">
                         <img
-                          src={`http://localhost:4000${image.imageUrl}`}
+                          src={`http://localhost:4001${image.imageUrl}`}
                           alt={`${car.make} ${car.model} - Image ${image.id}`}
                           loading="lazy"
                           onClick={() => setSelectedImage(image.imageUrl)}
@@ -451,7 +451,7 @@ export default function CarDetailsPage() {
           >
             <DialogContent className="!p-0">
               <img
-                src={`http://localhost:4000${selectedImage}`}
+                src={`http://localhost:4001${selectedImage}`}
                 alt="Car preview"
                 className="w-full h-auto"
               />

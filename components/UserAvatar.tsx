@@ -66,7 +66,7 @@ export function UserAvatar() {
         return;
       }
 
-      const response = await fetch('http://localhost:4000/upload', {
+      const response = await fetch('http://localhost:4001/upload', {
         method: 'POST',
         headers: {
           'Authorization': `Bearer ${token}`, // Add auth header
@@ -134,7 +134,7 @@ export function UserAvatar() {
         >
           {user.imageUrl ? (
             <img
-              src={`http://localhost:4000${user.imageUrl}`}
+              src={`http://localhost:4001${user.imageUrl}`}
               alt={user.name}
               className="w-full h-full object-cover"
             />
