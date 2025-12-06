@@ -96,7 +96,7 @@ export function AddCarForm({ open, onClose, onCarAdded }: AddCarFormProps) {
         return;
       }
 
-      const response = await fetch('http://localhost:4000/upload', {
+      const response = await fetch('http://localhost:4001/upload', {
         method: 'POST',
         headers: {
           'Authorization': `Bearer ${token}`, // Add auth header
@@ -225,9 +225,9 @@ export function AddCarForm({ open, onClose, onCarAdded }: AddCarFormProps) {
                     {imageUrl ? (
                       <Box className="relative">
                         <img
-                          src={`http://localhost:4000${imageUrl}`}
+                          src={`http://localhost:4001${imageUrl}`}
                           alt="Car preview"
-                          className="w-full h-48 object-cover rounded-lg"
+                          className="w-full h-48 object-cover rounded-lg shadow-lg"
                         />
                         <IconButton
                           onClick={() => fileInputRef.current?.click()}

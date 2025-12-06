@@ -2,9 +2,9 @@
 
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
-import { useQuery } from "@apollo/client";
+import { useQuery, useMutation } from "@apollo/client";
 import { useAuth } from "@/contexts/AuthContext";
-import { GET_CARS, GET_AVAILABLE_CARS } from "@/lib/graphql/carQueries";
+import { GET_CARS, GET_AVAILABLE_CARS, CREATE_RENTAL } from "@/lib/graphql/carQueries";
 import { AddCarForm } from "@/components/AddCarForm";
 import {
   Button,
@@ -21,7 +21,6 @@ import {
   DialogTitle,
   DialogContent,
   DialogActions,
-  DatePicker,
 } from "@mui/material";
 import {
   Search,
@@ -36,69 +35,6 @@ import {
   Add,
 } from "@mui/icons-material";
 
-const cars = [
-  {
-    id: 1,
-    name: "Tesla Model S",
-    category: "Electric",
-    price: 120,
-    rating: 5.0,
-    status: "Available",
-    image: "🚗",
-    features: ["Auto Pilot", "Supercharger", "Premium Interior"],
-  },
-  {
-    id: 2,
-    name: "Lamborghini Aventador",
-    category: "Sports",
-    price: 450,
-    rating: 5.0,
-    status: "Available",
-    image: "🏎️",
-    features: ["V12 Engine", "Carbon Fiber", "Racing Mode"],
-  },
-  {
-    id: 3,
-    name: "Ferrari LaFerrari",
-    category: "Supercar",
-    price: 550,
-    rating: 4.9,
-    status: "Booked",
-    image: "🏎️",
-    features: ["Hybrid Power", "Aerodynamic", "Limited Edition"],
-  },
-  {
-    id: 4,
-    name: "Ferrari-FF",
-    category: "Luxury",
-    price: 380,
-    rating: 4.5,
-    status: "Booked",
-    image: "🚙",
-    features: ["4WD", "V12 Engine", "Luxury Interior"],
-  },
-  {
-    id: 5,
-    name: "BMW M8 Coupe",
-    category: "Performance",
-    price: 185,
-    rating: 3.8,
-    status: "Available",
-    image: "🚗",
-    features: ["Twin Turbo", "M Sport", "Premium Sound"],
-  },
-  {
-    id: 6,
-    name: "BMW GTS3 M2",
-    category: "Performance",
-    price: 220,
-    rating: 4.9,
-    status: "Available",
-    image: "🚗",
-    features: ["Track Ready", "Carbon Package", "Racing Seats"],
-  },
-];
-
 const categories = ["All", "Electric", "Sports", "Supercar", "Luxury", "Performance"];
 
 export default function CarsPage() {
@@ -109,10 +45,16 @@ export default function CarsPage() {
   const [showFilters, setShowFilters] = useState(false);
   const [favorites, setFavorites] = useState<number[]>([]);
   const [addCarDialog, setAddCarDialog] = useState(false);
-
+  const [bookingDialog, setBookingDialog] = useState(false);
+  const [selectedCar, setSelectedCar] = useState<any>(null);
+  const [startDate, setStartDate] = useState("");
+  const [endDate, setEndDate] = useState("");
+  const [bookingError, setBookingError] = useState("");
+  const [bookingLoading, setBookingLoading] = useState(false);
   // GraphQL query for cars
   const { data: carsData, loading, error, refetch } = useQuery(GET_CARS);
   const cars = carsData?.cars || [];
+  const [createRental] = useMutation(CREATE_RENTAL);
 
   const filteredCars = cars.filter((car: any) => {
     const matchesSearch = car.make.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -126,11 +68,36 @@ export default function CarsPage() {
     setBookingDialog(true);
   };
 
-  const handleBookingSubmit = () => {
-    // TODO: Implement booking mutation
-    console.log('Booking car:', selectedCar, 'from', startDate, 'to', endDate);
+  const handleBookingSubmit = async () => {
+  if (!startDate || !endDate) {
+    setBookingError("Please select both start and end dates");
+    return;
+  }
+  
+  setBookingLoading(true);
+  setBookingError("");
+  
+  try {
+    await createRental({
+      variables: {
+        input: {
+          carId: parseInt(selectedCar.id),
+          startDate,
+          endDate,
+        },
+      },
+    });
+    
     setBookingDialog(false);
-  };
+    setSelectedCar(null);
+    alert("Booking successful!");
+    router.push("/bookings");
+  } catch (err: any) {
+    setBookingError(err.message || "Failed to create booking");
+  } finally {
+    setBookingLoading(false);
+  }
+};
 
   const handleCategoryClick = (category: string) => {
     setSelectedCategory(category);
@@ -140,10 +107,13 @@ export default function CarsPage() {
     router.push(`/cars/${carId}`);
   };
 
-  const handleBookNow = (carId: number, carName: string) => {
-    alert(`Booking ${carName}...`);
-    router.push(`/bookings?carId=${carId}`);
-  };
+const handleBookNow = (car: any) => {
+  setSelectedCar(car);
+  setStartDate("");
+  setEndDate("");
+  setBookingError("");
+  setBookingDialog(true);
+};
 
   const handleToggleFavorite = (carId: number, e: React.MouseEvent) => {
     e.stopPropagation();
@@ -262,7 +232,7 @@ export default function CarsPage() {
                 <Box className="flex h-48 items-center justify-center bg-gradient-to-br from-slate-700 to-slate-800">
                   {car.imageUrl ? (
                     <img 
-                      src={`http://localhost:4000${car.imageUrl}`} 
+                      src={`http://localhost:4001${car.imageUrl}`} 
                       alt={`${car.make} ${car.model}`}
                       className="w-full h-full object-cover"
                     />
@@ -341,12 +311,100 @@ export default function CarsPage() {
                     <Button
                       variant="contained"
                       startIcon={<ShoppingCart />}
-                      onClick={() => handleBookNow(car.id, `${car.make} ${car.model}`)}
+                      onClick={() => handleBookNow(car)}
                       className="!bg-emerald-500 hover:!bg-emerald-600 !rounded-xl"
                     >
                       Book
                     </Button>
                   )}
+                  {
+                      <Dialog
+                        open={bookingDialog}
+                        onClose={() => setBookingDialog(false)}
+                        maxWidth="sm"
+                        fullWidth
+                        PaperProps={{
+                          className: "!bg-slate-800 !border !border-white/10 !rounded-2xl",
+                        }}
+                      >
+                        <DialogTitle className="!text-white !border-b !border-white/10">
+                          Book {selectedCar?.make} {selectedCar?.model}
+                        </DialogTitle>
+                        <DialogContent className="!pt-4">
+                          {bookingError && (
+                            <Box className="!mb-4 !p-3 !bg-rose-500/20 !border !border-rose-500/30 !rounded-lg">
+                              <Typography className="!text-rose-400">{bookingError}</Typography>
+                            </Box>
+                          )}
+                          <Box className="space-y-4 !mt-4">
+                            <TextField
+                              label="Start Date"
+                              type="date"
+                              fullWidth
+                              value={startDate}
+                              onChange={(e) => setStartDate(e.target.value)}
+                              InputLabelProps={{ shrink: true }}
+                              inputProps={{ min: new Date().toISOString().split("T")[0] }}
+                              sx={{
+                                "& .MuiOutlinedInput-root": {
+                                  color: "white",
+                                  "& fieldset": { borderColor: "rgba(255, 255, 255, 0.2)" },
+                                  "&:hover fieldset": { borderColor: "rgba(255, 255, 255, 0.3)" },
+                                },
+                                "& .MuiInputLabel-root": { color: "rgba(255, 255, 255, 0.7)" },
+                              }}
+                            />
+                            <TextField
+                              label="End Date"
+                              type="date"
+                              fullWidth
+                              value={endDate}
+                              onChange={(e) => setEndDate(e.target.value)}
+                              InputLabelProps={{ shrink: true }}
+                              inputProps={{ min: startDate || new Date().toISOString().split("T")[0] }}
+                              sx={{
+                                "& .MuiOutlinedInput-root": {
+                                  color: "white",
+                                  "& fieldset": { borderColor: "rgba(255, 255, 255, 0.2)" },
+                                  "&:hover fieldset": { borderColor: "rgba(255, 255, 255, 0.3)" },
+                                },
+                                "& .MuiInputLabel-root": { color: "rgba(255, 255, 255, 0.7)" },
+                              }}
+                            />
+                            {selectedCar && startDate && endDate && (
+                              <Box className="!p-4 !bg-slate-900/50 !rounded-lg">
+                                <Typography className="!text-white/70 !mb-2">Estimated Total</Typography>
+                                <Typography className="!text-2xl !font-bold !text-blue-400">
+                                  ${(
+                                    (Math.ceil(
+                                      (new Date(endDate).getTime() - new Date(startDate).getTime()) /
+                                        (1000 * 60 * 60 * 24)
+                                    ) + 1) * selectedCar.pricePerDay
+                                  ).toFixed(2)}
+                                </Typography>
+                              </Box>
+                            )}
+                          </Box>
+                        </DialogContent>
+                        <DialogActions className="!p-4 !border-t !border-white/10">
+                          <Button
+                            onClick={() => setBookingDialog(false)}
+                            className="!text-white/70"
+                            disabled={bookingLoading}
+                          >
+                            Cancel
+                          </Button>
+                          <Button
+                            variant="contained"
+                            onClick={handleBookingSubmit}
+                            disabled={bookingLoading || !startDate || !endDate}
+                            className="!bg-emerald-500 hover:!bg-emerald-600"
+                          >
+                            {bookingLoading ? "Booking..." : "Confirm Booking"}
+                          </Button>
+                        </DialogActions>
+                      </Dialog>
+}
                 </Box>
               </CardContent>
             </Card>

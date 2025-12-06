@@ -2,6 +2,8 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import { useQuery, useMutation } from "@apollo/client";
+import { GET_USER_RENTALS, CANCEL_RENTAL } from "@/lib/graphql/carQueries";
 import {
   Button,
   Card,
@@ -14,6 +16,8 @@ import {
   DialogTitle,
   DialogContent,
   DialogActions,
+  CircularProgress,
+  Alert,
 } from "@mui/material";
 import {
   Add,
@@ -24,46 +28,15 @@ import {
   DirectionsCar,
 } from "@mui/icons-material";
 
-const bookings = [
-  {
-    id: 1,
-    car: "Tesla Model S",
-    bookingId: "BK-2025-001",
-    pickupDate: "22 Nov 2025",
-    pickupTime: "10:00 AM",
-    dropoffDate: "26 Nov 2025",
-    dropoffTime: "04:00 PM",
-    status: "Upcoming",
-    totalAmount: 480,
-    image: "🚗",
-  },
-  {
-    id: 2,
-    car: "BMW M8 Coupe",
-    bookingId: "BK-2025-002",
-    pickupDate: "14 Nov 2025",
-    pickupTime: "09:00 PM",
-    dropoffDate: "19 Nov 2025",
-    dropoffTime: "09:00 PM",
-    status: "Completed",
-    totalAmount: 925,
-    image: "🚗",
-  },
-  {
-    id: 3,
-    car: "Ferrari LaFerrari",
-    bookingId: "BK-2025-003",
-    pickupDate: "20 Nov 2025",
-    pickupTime: "10:00 AM",
-    dropoffDate: "25 Nov 2025",
-    dropoffTime: "08:00 AM",
-    status: "On Going",
-    totalAmount: 2750,
-    image: "🏎️",
-  },
-];
+const statusFilters = ["All", "PENDING", "ACTIVE", "COMPLETED", "CANCELLED"];
 
-const statusFilters = ["All", "Upcoming", "On Going", "Completed"];
+// Map backend status to display labels
+const statusDisplayMap: Record<string, string> = {
+  PENDING: "Upcoming",
+  ACTIVE: "On Going",
+  COMPLETED: "Completed",
+  CANCELLED: "Cancelled",
+};
 
 export default function BookingsPage() {
   const router = useRouter();
@@ -71,22 +44,46 @@ export default function BookingsPage() {
   const [cancelDialogOpen, setCancelDialogOpen] = useState(false);
   const [selectedBooking, setSelectedBooking] = useState<number | null>(null);
 
+  // Fetch rentals from GraphQL
+  const { data, loading, error, refetch } = useQuery(GET_USER_RENTALS);
+  const [cancelRental, { loading: cancelLoading }] = useMutation(CANCEL_RENTAL, {
+    onCompleted: () => {
+      refetch();
+      setCancelDialogOpen(false);
+      setSelectedBooking(null);
+    },
+  });
+
+  const rentals = data?.rentals || [];
+
   const filteredBookings =
     selectedStatus === "All"
-      ? bookings
-      : bookings.filter((booking) => booking.status === selectedStatus);
+      ? rentals
+      : rentals.filter((rental: any) => rental.status === selectedStatus);
 
   const getStatusColor = (status: string) => {
     switch (status) {
-      case "Upcoming":
+      case "PENDING":
         return { bg: "!bg-amber-500/20", text: "!text-amber-400", border: "!border-amber-500/30" };
-      case "On Going":
+      case "ACTIVE":
         return { bg: "!bg-blue-500/20", text: "!text-blue-400", border: "!border-blue-500/30" };
-      case "Completed":
+      case "COMPLETED":
         return { bg: "!bg-emerald-500/20", text: "!text-emerald-400", border: "!border-emerald-500/30" };
+      case "CANCELLED":
+        return { bg: "!bg-rose-500/20", text: "!text-rose-400", border: "!border-rose-500/30" };
       default:
         return { bg: "!bg-slate-500/20", text: "!text-slate-400", border: "!border-slate-500/30" };
     }
+  };
+
+  // Format date for display
+  const formatDate = (dateString: string) => {
+    const date = new Date(dateString);
+    return date.toLocaleDateString("en-US", {
+      day: "2-digit",
+      month: "short",
+      year: "numeric",
+    });
   };
 
   const handleStatusFilter = (status: string) => {
@@ -106,12 +103,14 @@ export default function BookingsPage() {
     setCancelDialogOpen(true);
   };
 
-  const handleCancelConfirm = () => {
+  const handleCancelConfirm = async () => {
     if (selectedBooking) {
-      alert(`Booking ${selectedBooking} cancelled`);
+      try {
+        await cancelRental({ variables: { id: selectedBooking } });
+      } catch (err: any) {
+        alert(err.message || "Failed to cancel booking");
+      }
     }
-    setCancelDialogOpen(false);
-    setSelectedBooking(null);
   };
 
   return (
@@ -161,20 +160,42 @@ export default function BookingsPage() {
         ))}
       </Box>
 
+      {/* Loading State */}
+      {loading && (
+        <Box className="flex justify-center py-12">
+          <CircularProgress className="!text-blue-500" />
+        </Box>
+      )}
+
+      {/* Error State */}
+      {error && (
+        <Alert severity="error" className="!bg-rose-500/20 !text-rose-400">
+          {error.message}
+        </Alert>
+      )}
+
       {/* Bookings List */}
-      {filteredBookings.length > 0 ? (
+      {!loading && !error && filteredBookings.length > 0 ? (
         <Grid container spacing={{ xs: 2, sm: 2, md: 3 }} sx={{ width: "100%" }}>
-          {filteredBookings.map((booking) => {
-            const statusColors = getStatusColor(booking.status);
+          {filteredBookings.map((rental: any) => {
+            const statusColors = getStatusColor(rental.status);
             return (
-              <Grid item xs={12} key={booking.id} sx={{ width: "100%" }}>
+              <Grid item xs={12} key={rental.id} sx={{ width: "100%" }}>
                 <Card className="!rounded-2xl !shadow-xl hover:!shadow-2xl !transition-all !bg-slate-800/50 !backdrop-blur-lg !border !border-white/10">
                   <CardContent className="!p-6">
                     <Grid container spacing={3}>
                       {/* Car Image */}
                       <Grid item xs={12} sm={4} md={3}>
-                        <Box className="flex h-48 sm:h-full items-center justify-center rounded-xl bg-gradient-to-br from-slate-700 to-slate-800 text-6xl">
-                          {booking.image}
+                        <Box className="flex h-48 sm:h-full items-center justify-center rounded-xl bg-gradient-to-br from-slate-700 to-slate-800 overflow-hidden">
+                          {rental.car?.imageUrl ? (
+                            <img 
+                              src={`http://localhost:4001${rental.car.imageUrl}`} 
+                              alt={`${rental.car.make} ${rental.car.model}`}
+                              className="w-full h-full object-cover"
+                            />
+                          ) : (
+                            <span className="text-6xl">🚗</span>
+                          )}
                         </Box>
                       </Grid>
 
@@ -184,23 +205,25 @@ export default function BookingsPage() {
                           <Box className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-4">
                             <Box>
                               <Typography variant="h5" className="!font-bold !text-white !mb-1">
-                                {booking.car}
+                                {rental.car?.make} {rental.car?.model}
                               </Typography>
                               <Typography variant="body2" className="!text-white/50">
-                                Booking ID: {booking.bookingId}
+                                Booking ID: #{rental.id}
                               </Typography>
                             </Box>
                             <Chip
                               icon={
-                                booking.status === "Upcoming" ? (
+                                rental.status === "PENDING" ? (
                                   <Schedule />
-                                ) : booking.status === "Completed" ? (
+                                ) : rental.status === "COMPLETED" ? (
                                   <CheckCircle />
+                                ) : rental.status === "CANCELLED" ? (
+                                  <Cancel />
                                 ) : (
                                   <DirectionsCar />
                                 )
                               }
-                              label={booking.status}
+                              label={statusDisplayMap[rental.status] || rental.status}
                               className={`${statusColors.bg} ${statusColors.text} ${statusColors.border} !border-2`}
                             />
                           </Box>
@@ -211,13 +234,10 @@ export default function BookingsPage() {
                               <Card className="!bg-slate-900/50">
                                 <CardContent className="!p-3">
                                   <Typography variant="caption" className="!text-white/50 !mb-1">
-                                    Pickup
+                                    Start Date
                                   </Typography>
                                   <Typography variant="body1" className="!font-semibold !text-white">
-                                    {booking.pickupDate}
-                                  </Typography>
-                                  <Typography variant="body2" className="!text-white/70">
-                                    {booking.pickupTime}
+                                    {formatDate(rental.startDate)}
                                   </Typography>
                                 </CardContent>
                               </Card>
@@ -226,13 +246,10 @@ export default function BookingsPage() {
                               <Card className="!bg-slate-900/50">
                                 <CardContent className="!p-3">
                                   <Typography variant="caption" className="!text-white/50 !mb-1">
-                                    Dropoff
+                                    End Date
                                   </Typography>
                                   <Typography variant="body1" className="!font-semibold !text-white">
-                                    {booking.dropoffDate}
-                                  </Typography>
-                                  <Typography variant="body2" className="!text-white/70">
-                                    {booking.dropoffTime}
+                                    {formatDate(rental.endDate)}
                                   </Typography>
                                 </CardContent>
                               </Card>
@@ -246,24 +263,25 @@ export default function BookingsPage() {
                                 Total Amount
                               </Typography>
                               <Typography variant="h5" className="!font-bold !text-blue-400">
-                                ${booking.totalAmount}
+                                ${rental.totalPrice?.toFixed(2)}
                               </Typography>
                             </Box>
                             <Box className="flex gap-2">
                               <Button
                                 variant="outlined"
                                 startIcon={<Visibility />}
-                                onClick={() => handleViewDetails(booking.bookingId)}
+                                onClick={() => handleViewDetails(rental.id)}
                                 className="!border-white/20 !text-white/70 hover:!bg-white/10 !rounded-xl"
                               >
                                 View Details
                               </Button>
-                              {booking.status === "Upcoming" && (
+                              {(rental.status === "PENDING" || rental.status === "ACTIVE") && (
                                 <Button
                                   variant="contained"
                                   startIcon={<Cancel />}
-                                  onClick={() => handleCancelClick(booking.id)}
+                                  onClick={() => handleCancelClick(rental.id)}
                                   className="!bg-rose-500 hover:!bg-rose-600 !rounded-xl"
+                                  disabled={cancelLoading}
                                 >
                                   Cancel
                                 </Button>
@@ -279,7 +297,7 @@ export default function BookingsPage() {
             );
           })}
         </Grid>
-      ) : (
+      ) : !loading && (
         <Card className="!text-center !py-12 !bg-slate-800/50 !backdrop-blur-lg !border !border-white/10">
           <CardContent>
             <Typography variant="body1" className="!text-white/70 !text-lg !mb-4">

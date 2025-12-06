@@ -78,7 +78,7 @@ export default function CarDetailsPage() {
       const formData = new FormData();
       formData.append("image", file);
 
-      const uploadResponse = await fetch("http://localhost:4000/upload", {
+      const uploadResponse = await fetch("http://localhost:4001/upload", {
         method: "POST",
         headers: {
           Authorization: `Bearer ${token}`,
@@ -198,9 +198,10 @@ export default function CarDetailsPage() {
                 {primaryImage && (
                   <Box className="relative w-full h-96 mb-4 rounded-xl overflow-hidden bg-slate-700">
                     <img
-                      src={`http://localhost:4000${primaryImage.imageUrl}`}
+                      src={`http://localhost:4001${primaryImage.imageUrl}`}
                       alt={`${car.make} ${car.model}`}
-                      className="w-full h-full object-cover"
+                      className="w-full h-full object-cover cursor-pointer transition-transform duration-300 hover:scale-105"
+                      onClick={() => setSelectedImage(primaryImage.imageUrl)}
                     />
                   </Box>
                 )}
@@ -210,7 +211,7 @@ export default function CarDetailsPage() {
                     {allImages.map((image: any) => (
                       <ImageListItem key={image.id} className="!cursor-pointer">
                         <img
-                          src={`http://localhost:4000${image.imageUrl}`}
+                          src={`http://localhost:4001${image.imageUrl}`}
                           alt={`${car.make} ${car.model} - Image ${image.id}`}
                           loading="lazy"
                           onClick={() => setSelectedImage(image.imageUrl)}
@@ -441,24 +442,70 @@ export default function CarDetailsPage() {
           </DialogActions>
         </Dialog>
 
-        {/* Image Preview Dialog */}
+        {/* Enhanced Image Viewer Modal */}
         {selectedImage && (
           <Dialog
             open={!!selectedImage}
             onClose={() => setSelectedImage(null)}
-            maxWidth="md"
+            maxWidth="lg"
             fullWidth
+            PaperProps={{
+              className: '!bg-slate-900 !border !border-white/10'
+            }}
           >
-            <DialogContent className="!p-0">
-              <img
-                src={`http://localhost:4000${selectedImage}`}
-                alt="Car preview"
-                className="w-full h-auto"
-              />
+            <DialogTitle className="!bg-slate-800 !text-white !border-b !border-white/10">
+              <Box className="flex justify-between items-center">
+                <Typography variant="h6">
+                  {car.make} {car.model} - Image Viewer
+                </Typography>
+                <IconButton 
+                  onClick={() => setSelectedImage(null)}
+                  className="!text-white hover:!bg-white/10"
+                >
+                  <ArrowBack />
+                </IconButton>
+              </Box>
+            </DialogTitle>
+            <DialogContent className="!p-4">
+              <Box className="relative bg-slate-800 rounded-lg overflow-hidden">
+                <img
+                  src={`http://localhost:4001${selectedImage}`}
+                  alt={`${car.make} ${car.model}`}
+                  className="w-full h-auto max-h-[70vh] object-contain"
+                />
+              </Box>
+              
+              {/* Image Navigation */}
+              {allImages.length > 1 && (
+                <Box className="flex justify-between items-center mt-4">
+                  <Button
+                    onClick={() => {
+                      const currentIndex = allImages.findIndex((img: any) => img.imageUrl === selectedImage);
+                      const prevIndex = currentIndex > 0 ? currentIndex - 1 : allImages.length - 1;
+                      setSelectedImage(allImages[prevIndex].imageUrl);
+                    }}
+                    className="!text-white !border-white/20"
+                    variant="outlined"
+                  >
+                    Previous
+                  </Button>
+                  <Typography className="!text-white/70">
+                    {allImages.findIndex((img: any) => img.imageUrl === selectedImage) + 1} / {allImages.length}
+                  </Typography>
+                  <Button
+                    onClick={() => {
+                      const currentIndex = allImages.findIndex((img: any) => img.imageUrl === selectedImage);
+                      const nextIndex = currentIndex < allImages.length - 1 ? currentIndex + 1 : 0;
+                      setSelectedImage(allImages[nextIndex].imageUrl);
+                    }}
+                    className="!text-white !border-white/20"
+                    variant="outlined"
+                  >
+                    Next
+                  </Button>
+                </Box>
+              )}
             </DialogContent>
-            <DialogActions>
-              <Button onClick={() => setSelectedImage(null)}>Close</Button>
-            </DialogActions>
           </Dialog>
         )}
       </Container>

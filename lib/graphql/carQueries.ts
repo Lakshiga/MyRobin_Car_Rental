@@ -218,7 +218,10 @@ export const GET_USER_ACTIVE_RENTALS = gql`
 
 export const CANCEL_RENTAL = gql`
   mutation CancelRental($id: Int!) {
-    cancelRental(id: $id)
+    cancelRental(id: $id) {
+      id
+      status
+    }
   }
 `;
 

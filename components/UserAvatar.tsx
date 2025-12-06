@@ -134,7 +134,7 @@ export function UserAvatar() {
         >
           {user.imageUrl ? (
             <img
-              src={`http://localhost:4000${user.imageUrl}`}
+              src={`http://localhost:4001${user.imageUrl}`}
               alt={user.name}
               className="w-full h-full object-cover"
             />
