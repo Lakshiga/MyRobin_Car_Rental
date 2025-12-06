@@ -12,9 +12,14 @@
     "@apollo/client": "^3.9.0",
     "@emotion/react": "^11.14.0",
     "@emotion/styled": "^11.14.1",
+<<<<<<< HEAD
     "@mui/icons-material": "^7.3.6",
     "@mui/material": "^7.3.6",
     "@mui/x-date-pickers": "^8.21.0",
+=======
+    "@mui/icons-material": "^6.1.0",
+    "@mui/material": "^6.1.0",
+>>>>>>> aaaedf207944aa99e3ace6bebb3fd73c9983e9a5
     "@types/react": "^18.3.3",
     "@types/react-dom": "^18.3.3",
     "dayjs": "^1.11.19",

@@ -217,8 +217,16 @@ export const GET_USER_ACTIVE_RENTALS = gql`
 `;
 
 export const CANCEL_RENTAL = gql`
+<<<<<<< HEAD
   mutation CancelRental($id: ID!) {
     cancelRental(id: $id)
+=======
+  mutation CancelRental($id: Int!) {
+    cancelRental(id: $id) {
+      id
+      status
+    }
+>>>>>>> aaaedf207944aa99e3ace6bebb3fd73c9983e9a5
   }
 `;
 

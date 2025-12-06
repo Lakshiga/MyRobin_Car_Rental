@@ -177,11 +177,16 @@ export default function BookingsPage() {
   const getStatusColor = (status: string) => {
     switch (status) {
       case "PENDING":
+      case "PENDING":
         return { bg: "!bg-amber-500/20", text: "!text-amber-400", border: "!border-amber-500/30" };
+      case "ACTIVE":
       case "ACTIVE":
         return { bg: "!bg-blue-500/20", text: "!text-blue-400", border: "!border-blue-500/30" };
       case "COMPLETED":
+      case "COMPLETED":
         return { bg: "!bg-emerald-500/20", text: "!text-emerald-400", border: "!border-emerald-500/30" };
+      case "CANCELLED":
+        return { bg: "!bg-rose-500/20", text: "!text-rose-400", border: "!border-rose-500/30" };
       case "CANCELLED":
         return { bg: "!bg-rose-500/20", text: "!text-rose-400", border: "!border-rose-500/30" };
       default:
@@ -226,6 +231,20 @@ export default function BookingsPage() {
           />
         ))}
       </Box>
+
+      {/* Loading State */}
+      {loading && (
+        <Box className="flex justify-center py-12">
+          <CircularProgress className="!text-blue-500" />
+        </Box>
+      )}
+
+      {/* Error State */}
+      {error && (
+        <Alert severity="error" className="!bg-rose-500/20 !text-rose-400">
+          {error.message}
+        </Alert>
+      )}
 
       {/* Error State */}
       {rentalsError && (
@@ -301,8 +320,9 @@ export default function BookingsPage() {
                                 <Button
                                   variant="contained"
                                   startIcon={<Cancel />}
-                                  onClick={() => handleCancelClick(booking.id)}
+                                  onClick={() => handleCancelClick(rental.id)}
                                   className="!bg-rose-500 hover:!bg-rose-600 !rounded-xl"
+                                  disabled={cancelLoading}
                                 >
                                   Cancel
                                 </Button>

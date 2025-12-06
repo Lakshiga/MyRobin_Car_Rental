@@ -233,7 +233,7 @@ export function AddCarForm({ open, onClose, onCarAdded }: AddCarFormProps) {
                         <img
                           src={`http://localhost:4001${imageUrl}`}
                           alt="Car preview"
-                          className="w-full h-48 object-cover rounded-lg"
+                          className="w-full h-48 object-cover rounded-lg shadow-lg"
                         />
                         <IconButton
                           onClick={() => fileInputRef.current?.click()}

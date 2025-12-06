@@ -200,7 +200,8 @@ export default function CarDetailsPage() {
                     <img
                       src={`http://localhost:4001${primaryImage.imageUrl}`}
                       alt={`${car.make} ${car.model}`}
-                      className="w-full h-full object-cover"
+                      className="w-full h-full object-cover cursor-pointer transition-transform duration-300 hover:scale-105"
+                      onClick={() => setSelectedImage(primaryImage.imageUrl)}
                     />
                   </Box>
                 )}
@@ -441,24 +442,79 @@ export default function CarDetailsPage() {
           </DialogActions>
         </Dialog>
 
-        {/* Image Preview Dialog */}
+        {/* Enhanced Image Viewer Modal */}
         {selectedImage && (
           <Dialog
             open={!!selectedImage}
             onClose={() => setSelectedImage(null)}
-            maxWidth="md"
+            maxWidth="lg"
             fullWidth
+            PaperProps={{
+              className: '!bg-slate-900 !border !border-white/10'
+            }}
           >
+<<<<<<< HEAD
             <DialogContent className="!p-0">
               <img
                 src={`http://localhost:4001${selectedImage}`}
                 alt="Car preview"
                 className="w-full h-auto"
               />
+=======
+            <DialogTitle className="!bg-slate-800 !text-white !border-b !border-white/10">
+              <Box className="flex justify-between items-center">
+                <Typography variant="h6">
+                  {car.make} {car.model} - Image Viewer
+                </Typography>
+                <IconButton 
+                  onClick={() => setSelectedImage(null)}
+                  className="!text-white hover:!bg-white/10"
+                >
+                  <ArrowBack />
+                </IconButton>
+              </Box>
+            </DialogTitle>
+            <DialogContent className="!p-4">
+              <Box className="relative bg-slate-800 rounded-lg overflow-hidden">
+                <img
+                  src={`http://localhost:4001${selectedImage}`}
+                  alt={`${car.make} ${car.model}`}
+                  className="w-full h-auto max-h-[70vh] object-contain"
+                />
+              </Box>
+              
+              {/* Image Navigation */}
+              {allImages.length > 1 && (
+                <Box className="flex justify-between items-center mt-4">
+                  <Button
+                    onClick={() => {
+                      const currentIndex = allImages.findIndex((img: any) => img.imageUrl === selectedImage);
+                      const prevIndex = currentIndex > 0 ? currentIndex - 1 : allImages.length - 1;
+                      setSelectedImage(allImages[prevIndex].imageUrl);
+                    }}
+                    className="!text-white !border-white/20"
+                    variant="outlined"
+                  >
+                    Previous
+                  </Button>
+                  <Typography className="!text-white/70">
+                    {allImages.findIndex((img: any) => img.imageUrl === selectedImage) + 1} / {allImages.length}
+                  </Typography>
+                  <Button
+                    onClick={() => {
+                      const currentIndex = allImages.findIndex((img: any) => img.imageUrl === selectedImage);
+                      const nextIndex = currentIndex < allImages.length - 1 ? currentIndex + 1 : 0;
+                      setSelectedImage(allImages[nextIndex].imageUrl);
+                    }}
+                    className="!text-white !border-white/20"
+                    variant="outlined"
+                  >
+                    Next
+                  </Button>
+                </Box>
+              )}
+>>>>>>> aaaedf207944aa99e3ace6bebb3fd73c9983e9a5
             </DialogContent>
-            <DialogActions>
-              <Button onClick={() => setSelectedImage(null)}>Close</Button>
-            </DialogActions>
           </Dialog>
         )}
       </Container>
